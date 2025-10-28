@@ -10,4 +10,8 @@ class AppConstants {
   // Timeouts
   static const int connectionTimeout = 30000; // 30 seconds
   static const int receiveTimeout = 30000; // 30 seconds
+  
+  // Counter Configuration
+  static const int counterMaxValue = 100;
+  static const int counterMinValue = -50;
 }

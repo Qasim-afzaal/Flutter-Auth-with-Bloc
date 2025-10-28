@@ -12,3 +12,5 @@ class CounterIncrementPressed extends CounterEvent {}
 class CounterDecrementPressed extends CounterEvent {}
 
 class CounterResetPressed extends CounterEvent {}
+
+class CounterDoublePressed extends CounterEvent {}

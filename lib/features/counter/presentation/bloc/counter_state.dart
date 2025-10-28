@@ -17,4 +17,7 @@ class CounterInitial extends CounterState {
 
 class CounterValueChanged extends CounterState {
   const CounterValueChanged(super.value);
+  
+  @override
+  String toString() => 'CounterValueChanged(value: $value)';
 }

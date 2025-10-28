@@ -75,6 +75,14 @@ class CounterView extends StatelessWidget {
                   heroTag: 'increment',
                   child: const Icon(Icons.add),
                 ),
+                FloatingActionButton(
+                  onPressed: () {
+                    context.read<CounterBloc>().add(CounterDoublePressed());
+                  },
+                  tooltip: 'Double',
+                  heroTag: 'double',
+                  child: const Icon(Icons.close),
+                ),
               ],
             ),
           ],
