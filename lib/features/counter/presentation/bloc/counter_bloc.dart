@@ -18,7 +18,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     Emitter<CounterState> emit,
   ) {
     final newValue = state.value + 1;
-    if (newValue <= AppConstants.counterMaxValue) {
+    if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
   }
@@ -28,7 +28,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     Emitter<CounterState> emit,
   ) {
     final newValue = state.value - 1;
-    if (newValue >= AppConstants.counterMinValue) {
+    if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
   }
