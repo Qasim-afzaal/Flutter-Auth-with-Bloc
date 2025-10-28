@@ -5,6 +5,7 @@ import '../../../../core/constants/app_constants.dart';
 
 // BLoC
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
+  static const String _logPrefix = 'CounterBloc';
   CounterBloc() : super(const CounterInitial()) {
     on<CounterIncrementPressed>(_onIncrementPressed);
     on<CounterDecrementPressed>(_onDecrementPressed);
