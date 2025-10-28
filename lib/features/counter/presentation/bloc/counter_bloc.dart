@@ -18,7 +18,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     CounterIncrementPressed event,
     Emitter<CounterState> emit,
   ) {
-    final newValue = state.value + 1;
+    final newValue = state.value + AppConstants.incrementStep;
     if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
@@ -28,7 +28,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     CounterDecrementPressed event,
     Emitter<CounterState> emit,
   ) {
-    final newValue = state.value - 1;
+    final newValue = state.value - AppConstants.decrementStep;
     if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
@@ -45,7 +45,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     CounterDoublePressed event,
     Emitter<CounterState> emit,
   ) {
-    final newValue = state.value * 2;
+    final newValue = state.value * AppConstants.doubleMultiplier;
     if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
@@ -55,7 +55,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     CounterHalfPressed event,
     Emitter<CounterState> emit,
   ) {
-    final newValue = state.value ~/ 2; // Integer division
+    final newValue = state.value ~/ AppConstants.halfDivisor;
     if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
