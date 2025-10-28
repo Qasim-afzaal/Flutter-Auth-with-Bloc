@@ -11,6 +11,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<CounterDecrementPressed>(_onDecrementPressed);
     on<CounterResetPressed>(_onResetPressed);
     on<CounterDoublePressed>(_onDoublePressed);
+    on<CounterHalfPressed>(_onHalfPressed);
   }
   
   void _onIncrementPressed(
@@ -45,7 +46,17 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     Emitter<CounterState> emit,
   ) {
     final newValue = state.value * 2;
-    if (newValue <= AppConstants.counterMaxValue) {
+    if (_isValueWithinBounds(newValue)) {
+      emit(CounterValueChanged(newValue));
+    }
+  }
+  
+  void _onHalfPressed(
+    CounterHalfPressed event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value ~/ 2; // Integer division
+    if (_isValueWithinBounds(newValue)) {
       emit(CounterValueChanged(newValue));
     }
   }
