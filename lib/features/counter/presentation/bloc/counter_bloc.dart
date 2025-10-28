@@ -49,4 +49,9 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       emit(CounterValueChanged(newValue));
     }
   }
+  
+  bool _isValueWithinBounds(int value) {
+    return value >= AppConstants.counterMinValue && 
+           value <= AppConstants.counterMaxValue;
+  }
 }
