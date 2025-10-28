@@ -14,4 +14,10 @@ class AppConstants {
   // Counter Configuration
   static const int counterMaxValue = 100;
   static const int counterMinValue = -50;
+  
+  // Counter Step Values
+  static const int incrementStep = 1;
+  static const int decrementStep = 1;
+  static const int doubleMultiplier = 2;
+  static const int halfDivisor = 2;
 }
