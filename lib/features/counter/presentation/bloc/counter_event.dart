@@ -7,7 +7,18 @@ abstract class CounterEvent extends Equatable {
   List<Object?> get props => [];
 }
  
-class IncreaseNumber extends  CounterEvent {}
-class DecreaseNumber extends  CounterEvent {}
-class ResetNumber extends  CounterEvent {}
+class IncreaseNumber extends CounterEvent {
+  @override
+  String toString() => 'IncreaseNumber';
+}
+
+class DecreaseNumber extends CounterEvent {
+  @override
+  String toString() => 'DecreaseNumber';
+}
+
+class ResetNumber extends CounterEvent {
+  @override
+  String toString() => 'ResetNumber';
+}
 
