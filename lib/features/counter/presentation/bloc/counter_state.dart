@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+/// Base state class for counter
+/// Contains the current counter value
 abstract class CounterState extends Equatable {
   final int value;
 
