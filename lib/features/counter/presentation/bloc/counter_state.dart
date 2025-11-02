@@ -11,6 +11,8 @@ abstract class CounterState extends Equatable {
   List<Object?> get props => [value];
 }
 
+/// Initial state when counter is first created
+/// Counter starts at 0
 class CounterInitial extends CounterState {
   const CounterInitial() : super(0);
   
@@ -18,6 +20,8 @@ class CounterInitial extends CounterState {
   String toString() => 'CounterInitial(value: $value)';
 }
 
+/// State emitted when counter value changes
+/// Contains the new counter value
 class CounterValueChanged extends CounterState {
   const CounterValueChanged(int value) : super(value);
   
