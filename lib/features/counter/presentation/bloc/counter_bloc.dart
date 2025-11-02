@@ -11,6 +11,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<ResetNumber>(_onResetPressed);
   }
   
+  /// Handles increment event - increases counter by 1
   void _onIncrementPressed(
     IncreaseNumber event,
     Emitter<CounterState> emit,
@@ -18,6 +19,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(CounterValueChanged(state.value + 1));
   }
   
+  /// Handles decrement event - decreases counter by 1
   void _onDecrementPressed(
     DecreaseNumber event,
     Emitter<CounterState> emit,
@@ -25,6 +27,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     emit(CounterValueChanged(state.value - 1));
   }
   
+  /// Handles reset event - sets counter to 0
   void _onResetPressed(
     ResetNumber event,
     Emitter<CounterState> emit,
