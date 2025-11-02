@@ -5,7 +5,7 @@ import 'counter_state.dart';
 /// BLoC for managing counter state
 /// Handles increment, decrement, and reset operations
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-  CounterBloc() : super(CounterInitial()) {
+  CounterBloc() : super(const CounterInitial()) {
     on<IncreaseNumber>(_onIncrementPressed);
     on<DecreaseNumber>(_onDecrementPressed);
     on<ResetNumber>(_onResetPressed);
