@@ -11,8 +11,14 @@ abstract class CounterState extends Equatable {
 
 class CounterInitial extends CounterState {
   const CounterInitial() : super(0);
+  
+  @override
+  String toString() => 'CounterInitial(value: $value)';
 }
 
 class CounterValueChanged extends CounterState {
   const CounterValueChanged(int value) : super(value);
+  
+  @override
+  String toString() => 'CounterValueChanged(value: $value)';
 }
