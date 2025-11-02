@@ -6,7 +6,7 @@ abstract class CounterEvent extends Equatable {
   @override
   List<Object?> get props => [];
 }
- 
+
 class IncreaseNumber extends CounterEvent {
   @override
   String toString() => 'IncreaseNumber';
@@ -21,4 +21,3 @@ class ResetNumber extends CounterEvent {
   @override
   String toString() => 'ResetNumber';
 }
-
