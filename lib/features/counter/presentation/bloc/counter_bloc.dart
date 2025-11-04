@@ -12,11 +12,15 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   }
   
   /// Handles increment event - increases counter by 1
+  /// Prevents counter from exceeding maximum value of 100
   void _onIncrementPressed(
     IncreaseNumber event,
     Emitter<CounterState> emit,
   ) {
-    emit(CounterValueChanged(state.value + 1));
+    const maxValue = 100;
+    if (state.value < maxValue) {
+      emit(CounterValueChanged(state.value + 1));
+    }
   }
   
   /// Handles decrement event - decreases counter by 1
