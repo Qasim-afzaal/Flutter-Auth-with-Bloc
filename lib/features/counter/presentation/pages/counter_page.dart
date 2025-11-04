@@ -4,6 +4,8 @@ import '../bloc/counter_bloc.dart';
 import '../bloc/counter_event.dart';
 import '../bloc/counter_state.dart';
 
+/// CounterPage provides the CounterBloc to its child widgets
+/// BlocProvider makes the bloc available to all child widgets via context.read<CounterBloc>()
 class CounterPage extends StatelessWidget {
   const CounterPage({super.key});
 
