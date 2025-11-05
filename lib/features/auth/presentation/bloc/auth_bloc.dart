@@ -1,9 +1,11 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/errors/failures.dart';
 import '../../domain/repositories/auth_repository.dart';
 import 'auth_event.dart';
 import 'auth_bloc_state.dart';
 
-// Bloc
+/// Authentication BLoC for managing user authentication state
+/// Handles login, registration, logout, and authentication status checks
 class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
   final AuthRepository _authRepository;
   
@@ -17,6 +19,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
     on<AuthCheckRequested>(_onAuthCheckRequested);
   }
   
+  /// Handles login request event
+  /// Validates credentials and emits authentication state
   Future<void> _onLoginRequested(
     LoginRequested event,
     Emitter<AuthBlocState> emit,
@@ -26,11 +30,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
     try {
       final user = await _authRepository.login(event.email, event.password);
       emit(AuthAuthenticated(user));
+    } on ValidationFailure catch (e) {
+      emit(AuthError('Validation error: ${e.message}'));
+    } on AuthFailure catch (e) {
+      emit(AuthError('Authentication failed: ${e.message}'));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('Unexpected error: ${e.toString()}'));
     }
   }
   
+  /// Handles registration request event
+  /// Creates new user account and emits authentication state
   Future<void> _onRegisterRequested(
     RegisterRequested event,
     Emitter<AuthBlocState> emit,
@@ -44,11 +54,17 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
         event.name,
       );
       emit(AuthAuthenticated(user));
+    } on ValidationFailure catch (e) {
+      emit(AuthError('Validation error: ${e.message}'));
+    } on AuthFailure catch (e) {
+      emit(AuthError('Registration failed: ${e.message}'));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('Unexpected error: ${e.toString()}'));
     }
   }
   
+  /// Handles logout request event
+  /// Clears user session and emits unauthenticated state
   Future<void> _onLogoutRequested(
     LogoutRequested event,
     Emitter<AuthBlocState> emit,
@@ -59,10 +75,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
       await _authRepository.logout();
       emit(AuthUnauthenticated());
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(AuthError('Logout error: ${e.toString()}'));
     }
   }
   
+  /// Handles authentication check request event
+  /// Verifies if user is currently authenticated
   Future<void> _onAuthCheckRequested(
     AuthCheckRequested event,
     Emitter<AuthBlocState> emit,

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/constants/app_constants.dart';
 import 'counter_event.dart';
 import 'counter_state.dart';
 
@@ -12,23 +13,25 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   }
   
   /// Handles increment event - increases counter by 1
-  /// Prevents counter from exceeding maximum value of 100
+  /// Prevents counter from exceeding maximum value
   void _onIncrementPressed(
     IncreaseNumber event,
     Emitter<CounterState> emit,
   ) {
-    const maxValue = 100;
-    if (state.value < maxValue) {
-      emit(CounterValueChanged(state.value + 1));
+    if (state.value < AppConstants.counterMaxValue) {
+      emit(CounterValueChanged(state.value + AppConstants.incrementStep));
     }
   }
   
   /// Handles decrement event - decreases counter by 1
+  /// Prevents counter from going below minimum value
   void _onDecrementPressed(
     DecreaseNumber event,
     Emitter<CounterState> emit,
   ) {
-    emit(CounterValueChanged(state.value - 1));
+    if (state.value > AppConstants.counterMinValue) {
+      emit(CounterValueChanged(state.value - AppConstants.decrementStep));
+    }
   }
   
   /// Handles reset event - sets counter to 0

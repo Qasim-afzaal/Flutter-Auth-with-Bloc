@@ -48,11 +48,19 @@ class ApiClient {
   
   Map<String, dynamic> _handleResponse(http.Response response) {
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return json.decode(response.body);
+      try {
+        return json.decode(response.body) as Map<String, dynamic>;
+      } catch (e) {
+        throw ServerFailure('Invalid JSON response: $e');
+      }
     } else if (response.statusCode == 401) {
-      throw const AuthFailure('Unauthorized');
+      throw const AuthFailure('Unauthorized - Invalid credentials');
+    } else if (response.statusCode == 403) {
+      throw const AuthFailure('Forbidden - Access denied');
+    } else if (response.statusCode >= 500) {
+      throw ServerFailure('Server error: ${response.statusCode} - Internal server error');
     } else {
-      throw ServerFailure('Server error: ${response.statusCode}');
+      throw ServerFailure('Request failed with status ${response.statusCode}: ${response.body}');
     }
   }
 }
