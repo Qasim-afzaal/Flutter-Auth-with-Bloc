@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../injection/injection_container.dart' as di;
 import '../bloc/counter_bloc.dart';
 import '../bloc/counter_event.dart';
 import '../bloc/counter_state.dart';
@@ -13,7 +12,7 @@ class CounterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => di.sl<CounterBloc>(),
+      create: (context) => CounterBloc(),
       child: const CounterView(),
     );
   }
@@ -37,20 +36,20 @@ class CounterView extends StatelessWidget {
               'You have pushed the button this many times:',
               style: TextStyle(fontSize: 16),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             BlocBuilder<CounterBloc, CounterState>(
               builder: (context, state) {
                 return Text(
                   '${state.value}',
                   style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    fontSize: 48,
+                    fontSize: 64,
                     fontWeight: FontWeight.bold,
                     color: Theme.of(context).colorScheme.primary,
                   ),
                 );
               },
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 48),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
