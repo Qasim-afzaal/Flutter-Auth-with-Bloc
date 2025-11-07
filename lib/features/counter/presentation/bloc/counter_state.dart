@@ -28,3 +28,21 @@ class CounterValueChanged extends CounterState {
   @override
   String toString() => 'CounterValueChanged(value: $value)';
 }
+
+/// State emitted when counter reaches maximum value
+/// Indicates that the counter cannot be incremented further
+class CounterMaxReached extends CounterState {
+  const CounterMaxReached() : super(100);
+  
+  @override
+  String toString() => 'CounterMaxReached(value: $value)';
+}
+
+/// State emitted when counter reaches minimum value
+/// Indicates that the counter cannot be decremented further
+class CounterMinReached extends CounterState {
+  const CounterMinReached() : super(-50);
+  
+  @override
+  String toString() => 'CounterMinReached(value: $value)';
+}
