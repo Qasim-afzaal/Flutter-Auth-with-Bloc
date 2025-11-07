@@ -5,18 +5,30 @@ import '../features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
 import '../features/counter/presentation/bloc/counter_bloc.dart';
 
+/// Service locator instance for dependency injection
+/// Use this to access registered dependencies throughout the app
 final sl = GetIt.instance;
 
+/// Initializes all dependencies for the application
+/// This should be called before running the app in main.dart
+/// 
+/// Registers:
+/// - External dependencies (API clients, etc.)
+/// - Repositories (data layer)
+/// - BLoCs (presentation layer)
 Future<void> init() async {
-  // External
+  // External dependencies
+  // These are singletons that persist for the app lifetime
   sl.registerLazySingleton(() => ApiClient());
   
-  // Repository
+  // Repository layer
+  // Repositories implement domain interfaces and handle data operations
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryImpl(apiClient: sl()),
   );
   
-  // Bloc
+  // BLoC layer
+  // BLoCs are registered as factories to create new instances per widget tree
   sl.registerFactory(
     () => AuthBloc(authRepository: sl()),
   );
