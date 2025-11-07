@@ -20,4 +20,14 @@ class AppConstants {
   static const int decrementStep = 1;
   static const int doubleMultiplier = 2;
   static const int halfDivisor = 2;
+  
+  // UI Configuration
+  static const double defaultPadding = 16.0;
+  static const double defaultBorderRadius = 8.0;
+  static const double defaultElevation = 2.0;
+  
+  // Animation Durations
+  static const int shortAnimationDuration = 200; // milliseconds
+  static const int mediumAnimationDuration = 300; // milliseconds
+  static const int longAnimationDuration = 500; // milliseconds
 }
