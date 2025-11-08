@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
 /// Base class for all authentication events
+/// All authentication-related events must extend this class
 abstract class AuthEvent extends Equatable {
   const AuthEvent();
   
@@ -8,7 +9,8 @@ abstract class AuthEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Event triggered when user requests to login
+/// Event to request user login
+/// Contains email and password for authentication
 class LoginRequested extends AuthEvent {
   final String email;
   final String password;
@@ -20,12 +22,10 @@ class LoginRequested extends AuthEvent {
   
   @override
   List<Object?> get props => [email, password];
-  
-  @override
-  String toString() => 'LoginRequested(email: $email)';
 }
 
-/// Event triggered when user requests to register
+/// Event to request user registration
+/// Contains email, password, and name for creating a new account
 class RegisterRequested extends AuthEvent {
   final String email;
   final String password;
@@ -39,19 +39,12 @@ class RegisterRequested extends AuthEvent {
   
   @override
   List<Object?> get props => [email, password, name];
-  
-  @override
-  String toString() => 'RegisterRequested(email: $email, name: $name)';
 }
 
-/// Event triggered when user requests to logout
-class LogoutRequested extends AuthEvent {
-  @override
-  String toString() => 'LogoutRequested';
-}
+/// Event to request user logout
+/// Signs out the currently authenticated user
+class LogoutRequested extends AuthEvent {}
 
-/// Event triggered to check current authentication status
-class AuthCheckRequested extends AuthEvent {
-  @override
-  String toString() => 'AuthCheckRequested';
-}
+/// Event to check current authentication status
+/// Verifies if a user is currently authenticated
+class AuthCheckRequested extends AuthEvent {}
