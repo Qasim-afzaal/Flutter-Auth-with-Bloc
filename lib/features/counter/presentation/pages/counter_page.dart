@@ -53,29 +53,32 @@ class CounterView extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                FloatingActionButton(
+                FloatingActionButton.extended(
                   onPressed: () {
                     context.read<CounterBloc>().add(DecreaseNumber());
                   },
                   tooltip: 'Decrement',
                   heroTag: 'decrement',
-                  child: const Icon(Icons.remove),
+                  icon: const Icon(Icons.remove),
+                  label: const Text('Decrease'),
                 ),
-                FloatingActionButton(
+                FloatingActionButton.extended(
                   onPressed: () {
                     context.read<CounterBloc>().add(ResetNumber());
                   },
                   tooltip: 'Reset',
                   heroTag: 'reset',
-                  child: const Icon(Icons.refresh),
+                  icon: const Icon(Icons.refresh),
+                  label: const Text('Reset'),
                 ),
-                FloatingActionButton(
+                FloatingActionButton.extended(
                   onPressed: () {
                     context.read<CounterBloc>().add(IncreaseNumber());
                   },
                   tooltip: 'Increment',
                   heroTag: 'increment',
-                  child: const Icon(Icons.add),
+                  icon: const Icon(Icons.add),
+                  label: const Text('Increase'),
                 ),
                 
               ],
