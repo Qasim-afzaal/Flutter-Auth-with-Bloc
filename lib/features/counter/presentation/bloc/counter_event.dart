@@ -32,3 +32,11 @@ class ResetNumber extends CounterEvent {
   @override
   String toString() => 'ResetNumber';
 }
+
+/// Event to multiply the counter value by 2
+/// This event is dispatched when the user wants to double the current value
+/// The counter will be multiplied by 2, respecting max and min constraints
+class MultiplyNumber extends CounterEvent {
+  @override
+  String toString() => 'MultiplyNumber';
+}
