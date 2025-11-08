@@ -36,3 +36,21 @@ class AuthFailure extends Failure {
 class ValidationFailure extends Failure {
   const ValidationFailure(super.message);
 }
+
+/// Helper extension to get user-friendly error messages from failures
+extension FailureMessage on Failure {
+  /// Returns a user-friendly error message
+  /// Converts technical error messages to more readable format
+  String get userMessage {
+    if (this is NetworkFailure) {
+      return 'Network error. Please check your connection and try again.';
+    } else if (this is AuthFailure) {
+      return 'Authentication failed. Please check your credentials.';
+    } else if (this is ValidationFailure) {
+      return 'Invalid input: $message';
+    } else if (this is ServerFailure) {
+      return 'Server error. Please try again later.';
+    }
+    return message;
+  }
+}
