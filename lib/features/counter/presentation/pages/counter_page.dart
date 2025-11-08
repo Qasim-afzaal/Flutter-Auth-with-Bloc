@@ -28,6 +28,7 @@ class CounterView extends StatelessWidget {
         title: const Text('Counter BLoC Demo'),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
