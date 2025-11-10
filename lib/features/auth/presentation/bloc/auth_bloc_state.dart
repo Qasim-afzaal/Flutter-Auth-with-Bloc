@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import '../../domain/entities/user.dart';
 
 /// Base class for all authentication states
+/// All authentication-related states must extend this class
 abstract class AuthBlocState extends Equatable {
   const AuthBlocState();
   
@@ -9,19 +10,16 @@ abstract class AuthBlocState extends Equatable {
   List<Object?> get props => [];
 }
 
-/// Initial state when authentication BLoC is first created
-class AuthInitial extends AuthBlocState {
-  @override
-  String toString() => 'AuthInitial';
-}
+/// Initial authentication state
+/// Represents the state when the app first loads
+class AuthInitial extends AuthBlocState {}
 
-/// State emitted when authentication operation is in progress
-class AuthLoading extends AuthBlocState {
-  @override
-  String toString() => 'AuthLoading';
-}
+/// Loading state during authentication operations
+/// Shown when login, register, or logout is in progress
+class AuthLoading extends AuthBlocState {}
 
-/// State emitted when user is successfully authenticated
+/// Authenticated state
+/// Represents a successfully authenticated user session
 class AuthAuthenticated extends AuthBlocState {
   final User user;
   
@@ -29,18 +27,14 @@ class AuthAuthenticated extends AuthBlocState {
   
   @override
   List<Object?> get props => [user];
-  
-  @override
-  String toString() => 'AuthAuthenticated(user: ${user.email})';
 }
 
-/// State emitted when user is not authenticated
-class AuthUnauthenticated extends AuthBlocState {
-  @override
-  String toString() => 'AuthUnauthenticated';
-}
+/// Unauthenticated state
+/// Represents a state where no user is logged in
+class AuthUnauthenticated extends AuthBlocState {}
 
-/// State emitted when an authentication error occurs
+/// Error state for authentication failures
+/// Contains error message describing what went wrong
 class AuthError extends AuthBlocState {
   final String message;
   
@@ -48,7 +42,4 @@ class AuthError extends AuthBlocState {
   
   @override
   List<Object?> get props => [message];
-  
-  @override
-  String toString() => 'AuthError(message: $message)';
 }
