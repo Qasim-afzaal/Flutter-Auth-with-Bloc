@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import '../../../../core/constants/app_constants.dart';
 
 /// Base state class for counter
 /// Contains the current counter value
@@ -32,7 +33,7 @@ class CounterValueChanged extends CounterState {
 /// State emitted when counter reaches maximum value
 /// Indicates that the counter cannot be incremented further
 class CounterMaxReached extends CounterState {
-  const CounterMaxReached() : super(100);
+  const CounterMaxReached() : super(AppConstants.counterMaxValue);
   
   @override
   String toString() => 'CounterMaxReached(value: $value)';
@@ -41,7 +42,7 @@ class CounterMaxReached extends CounterState {
 /// State emitted when counter reaches minimum value
 /// Indicates that the counter cannot be decremented further
 class CounterMinReached extends CounterState {
-  const CounterMinReached() : super(-50);
+  const CounterMinReached() : super(AppConstants.counterMinValue);
   
   @override
   String toString() => 'CounterMinReached(value: $value)';
