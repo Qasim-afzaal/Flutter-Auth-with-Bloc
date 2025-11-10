@@ -40,3 +40,11 @@ class MultiplyNumber extends CounterEvent {
   @override
   String toString() => 'MultiplyNumber';
 }
+
+/// Event to divide the counter value by 2
+/// This event is dispatched when the user wants to halve the current value
+/// The counter will be divided by 2, respecting max and min constraints
+class DivideNumber extends CounterEvent {
+  @override
+  String toString() => 'DivideNumber';
+}
