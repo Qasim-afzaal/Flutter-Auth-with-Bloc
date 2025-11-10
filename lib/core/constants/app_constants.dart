@@ -30,4 +30,8 @@ class AppConstants {
   static const int shortAnimationDuration = 200; // milliseconds
   static const int mediumAnimationDuration = 300; // milliseconds
   static const int longAnimationDuration = 500; // milliseconds
+  
+  // App Version
+  static const String appVersion = '1.0.0';
+  static const String appBuildNumber = '1';
 }
