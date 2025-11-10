@@ -29,10 +29,12 @@ class CounterView extends StatelessWidget {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
             const Text(
               'You have pushed the button this many times:',
               style: TextStyle(fontSize: 16),
@@ -85,6 +87,7 @@ class CounterView extends StatelessWidget {
               ],
             ),
           ],
+        ),
         ),
       ),
     );
