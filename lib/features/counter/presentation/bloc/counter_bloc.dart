@@ -10,6 +10,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<IncreaseNumber>(_onIncrementPressed);
     on<DecreaseNumber>(_onDecrementPressed);
     on<ResetNumber>(_onResetPressed);
+    on<MultiplyNumber>(_onMultiplyPressed);
   }
   
   /// Handles increment event - increases counter by 1
@@ -40,5 +41,19 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     Emitter<CounterState> emit,
   ) {
     emit(const CounterValueChanged(0));
+  }
+  
+  /// Handles multiply event - multiplies counter by 2
+  /// Prevents counter from exceeding maximum value defined in AppConstants
+  void _onMultiplyPressed(
+    MultiplyNumber event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value * AppConstants.doubleMultiplier;
+    if (newValue <= AppConstants.counterMaxValue) {
+      emit(CounterValueChanged(newValue));
+    } else {
+      emit(const CounterValueChanged(AppConstants.counterMaxValue));
+    }
   }
 }
