@@ -71,4 +71,11 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       emit(const CounterValueChanged(AppConstants.counterMinValue));
     }
   }
+  
+  /// Helper method to check if counter value is within bounds
+  /// Returns true if value is between min and max, false otherwise
+  bool _isWithinBounds(int value) {
+    return value >= AppConstants.counterMinValue && 
+           value <= AppConstants.counterMaxValue;
+  }
 }
