@@ -26,6 +26,18 @@ class MyApp extends StatelessWidget {
           elevation: 2,
         ),
       ),
+      darkTheme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: Colors.deepPurple,
+          brightness: Brightness.dark,
+        ),
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 2,
+        ),
+      ),
+      themeMode: ThemeMode.system,
       home: const CounterPage(),
       debugShowCheckedModeBanner: false,
     );
