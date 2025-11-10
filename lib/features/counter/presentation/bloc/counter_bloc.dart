@@ -11,6 +11,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<DecreaseNumber>(_onDecrementPressed);
     on<ResetNumber>(_onResetPressed);
     on<MultiplyNumber>(_onMultiplyPressed);
+    on<DivideNumber>(_onDividePressed);
   }
   
   /// Handles increment event - increases counter by 1
@@ -54,6 +55,20 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       emit(CounterValueChanged(newValue));
     } else {
       emit(const CounterValueChanged(AppConstants.counterMaxValue));
+    }
+  }
+  
+  /// Handles divide event - divides counter by 2
+  /// Prevents counter from going below minimum value defined in AppConstants
+  void _onDividePressed(
+    DivideNumber event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value ~/ AppConstants.halfDivisor;
+    if (newValue >= AppConstants.counterMinValue) {
+      emit(CounterValueChanged(newValue));
+    } else {
+      emit(const CounterValueChanged(AppConstants.counterMinValue));
     }
   }
 }
