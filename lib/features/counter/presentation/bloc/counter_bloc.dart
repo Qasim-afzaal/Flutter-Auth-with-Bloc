@@ -13,6 +13,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<ResetNumber>(_onResetPressed);
     on<MultiplyNumber>(_onMultiplyPressed);
     on<DivideNumber>(_onDividePressed);
+    on<SetValue>(_onSetValue);
   }
   
   /// Handles increment event - increases counter by 1
@@ -73,10 +74,31 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     }
   }
   
+  /// Handles set value event - sets counter to a specific value
+  /// Clamps the value to min/max constraints if outside bounds
+  void _onSetValue(
+    SetValue event,
+    Emitter<CounterState> emit,
+  ) {
+    final clampedValue = _clampValue(event.value);
+    emit(CounterValueChanged(clampedValue));
+  }
+  
   /// Helper method to check if counter value is within bounds
   /// Returns true if value is between min and max, false otherwise
   bool _isWithinBounds(int value) {
     return value >= AppConstants.counterMinValue && 
            value <= AppConstants.counterMaxValue;
+  }
+  
+  /// Clamps a value to the allowed counter range
+  /// Returns the value clamped between min and max
+  int _clampValue(int value) {
+    if (value < AppConstants.counterMinValue) {
+      return AppConstants.counterMinValue;
+    } else if (value > AppConstants.counterMaxValue) {
+      return AppConstants.counterMaxValue;
+    }
+    return value;
   }
 }
