@@ -1,5 +1,8 @@
 /// Utility functions for string manipulation and formatting
 /// Provides common string operations used across the application
+/// 
+/// This class contains static methods for manipulating and formatting strings
+/// including capitalization, truncation, whitespace removal, and case conversion.
 class StringUtils {
   /// Capitalizes the first letter of a string
   /// Returns the string with first letter uppercase and rest lowercase
