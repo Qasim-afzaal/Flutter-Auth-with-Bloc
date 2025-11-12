@@ -47,3 +47,17 @@ class CounterMinReached extends CounterState {
   @override
   String toString() => 'CounterMinReached(value: $value)';
 }
+
+/// State emitted when counter history is requested
+/// Contains a list of previous counter values
+class CounterHistory extends CounterState {
+  final List<int> history;
+  
+  const CounterHistory(this.history, int currentValue) : super(currentValue);
+  
+  @override
+  List<Object?> get props => [history, value];
+  
+  @override
+  String toString() => 'CounterHistory(value: $value, history: $history)';
+}
