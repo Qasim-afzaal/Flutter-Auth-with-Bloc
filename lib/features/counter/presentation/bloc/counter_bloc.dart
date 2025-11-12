@@ -101,4 +101,21 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     }
     return value;
   }
+  
+  /// Gets the current counter status as a string
+  /// Returns descriptive status based on current value
+  String getCounterStatus() {
+    final value = state.value;
+    if (value == AppConstants.counterMaxValue) {
+      return 'Maximum reached';
+    } else if (value == AppConstants.counterMinValue) {
+      return 'Minimum reached';
+    } else if (value == 0) {
+      return 'Reset';
+    } else if (value > 0) {
+      return 'Positive';
+    } else {
+      return 'Negative';
+    }
+  }
 }
