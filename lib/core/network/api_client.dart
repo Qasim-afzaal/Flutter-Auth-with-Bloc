@@ -5,7 +5,7 @@ import '../constants/app_constants.dart';
 import '../errors/failures.dart';
 
 /// API Client for making HTTP requests
-/// Handles GET and POST requests with proper error handling
+/// Handles GET, POST, PUT, and DELETE requests with proper error handling
 /// All requests include timeout protection and consistent error handling
 class ApiClient {
   final http.Client _client;
