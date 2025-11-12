@@ -42,13 +42,26 @@ class CounterView extends StatelessWidget {
             const SizedBox(height: 24),
             BlocBuilder<CounterBloc, CounterState>(
               builder: (context, state) {
-                return Text(
-                  '${state.value}',
-                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                    fontSize: 64,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
+                final bloc = context.read<CounterBloc>();
+                final status = bloc.getCounterStatus();
+                return Column(
+                  children: [
+                    Text(
+                      '${state.value}',
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        fontSize: 64,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Status: $status',
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                  ],
                 );
               },
             ),
