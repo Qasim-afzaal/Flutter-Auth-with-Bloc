@@ -1,5 +1,8 @@
 /// Utility functions for number operations and formatting
 /// Provides common number manipulation methods used across the application
+/// 
+/// This class contains static methods for number operations including clamping,
+/// parity checking, formatting, and percentage calculations.
 class NumberUtils {
   /// Clamps a number between min and max values
   /// Returns the number if within range, otherwise returns the boundary value
