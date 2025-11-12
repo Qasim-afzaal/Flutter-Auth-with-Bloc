@@ -48,3 +48,18 @@ class DivideNumber extends CounterEvent {
   @override
   String toString() => 'DivideNumber';
 }
+
+/// Event to set the counter to a specific value
+/// This event allows setting the counter to any value within the allowed range
+/// The value will be clamped to min/max constraints if outside bounds
+class SetValue extends CounterEvent {
+  final int value;
+  
+  const SetValue(this.value);
+  
+  @override
+  List<Object?> get props => [value];
+  
+  @override
+  String toString() => 'SetValue(value: $value)';
+}
