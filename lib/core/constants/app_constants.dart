@@ -34,4 +34,11 @@ class AppConstants {
   // App Version
   static const String appVersion = '1.0.0';
   static const String appBuildNumber = '1';
+  
+  // Error Messages
+  static const String errorNetworkConnection = 'Network connection error. Please check your internet connection.';
+  static const String errorServerError = 'Server error occurred. Please try again later.';
+  static const String errorAuthenticationFailed = 'Authentication failed. Please check your credentials.';
+  static const String errorValidationFailed = 'Validation failed. Please check your input.';
+  static const String errorUnknown = 'An unknown error occurred. Please try again.';
 }
