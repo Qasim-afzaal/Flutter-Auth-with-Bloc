@@ -57,6 +57,51 @@ class ApiClient {
     }
   }
   
+  /// Performs a PUT request to the specified endpoint with JSON body
+  /// 
+  /// Throws [NetworkFailure] if network error occurs or timeout is exceeded
+  /// Throws [AuthFailure] if response is 401 Unauthorized
+  /// Throws [ServerFailure] if response status code indicates server error
+  Future<Map<String, dynamic>> put(String endpoint, Map<String, dynamic> body) async {
+    try {
+      final response = await _client
+          .put(
+            Uri.parse('${AppConstants.baseUrl}/${AppConstants.apiVersion}$endpoint'),
+            headers: _getHeaders(),
+            body: json.encode(body),
+          )
+          .timeout(const Duration(milliseconds: AppConstants.connectionTimeout));
+      
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkFailure('Request timeout: Connection timed out');
+    } catch (e) {
+      throw NetworkFailure('Network error: $e');
+    }
+  }
+  
+  /// Performs a DELETE request to the specified endpoint
+  /// 
+  /// Throws [NetworkFailure] if network error occurs or timeout is exceeded
+  /// Throws [AuthFailure] if response is 401 Unauthorized
+  /// Throws [ServerFailure] if response status code indicates server error
+  Future<Map<String, dynamic>> delete(String endpoint) async {
+    try {
+      final response = await _client
+          .delete(
+            Uri.parse('${AppConstants.baseUrl}/${AppConstants.apiVersion}$endpoint'),
+            headers: _getHeaders(),
+          )
+          .timeout(const Duration(milliseconds: AppConstants.connectionTimeout));
+      
+      return _handleResponse(response);
+    } on TimeoutException {
+      throw NetworkFailure('Request timeout: Connection timed out');
+    } catch (e) {
+      throw NetworkFailure('Network error: $e');
+    }
+  }
+  
   /// Returns default HTTP headers for all requests
   /// Includes Content-Type and Accept headers for JSON communication
   Map<String, String> _getHeaders() {
