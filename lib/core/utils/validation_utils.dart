@@ -1,5 +1,8 @@
 /// Utility functions for input validation
 /// Provides common validation methods used across the application
+/// 
+/// This class contains static methods for validating various types of user input
+/// including emails, passwords, names, and other common data formats.
 class ValidationUtils {
   /// Validates if an email address is in correct format
   /// Returns true if email is valid, false otherwise
