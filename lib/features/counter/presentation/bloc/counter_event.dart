@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// Base class for all counter events
 /// All counter-related events must extend this class
-abstract class CounterEvent extends Equatable {
+sealed class CounterEvent extends Equatable {
   const CounterEvent();
 
   @override
@@ -65,7 +65,7 @@ class DivideNumber extends CounterEvent {
 class SetValue extends CounterEvent {
   final int value;
   
-  const SetValue(this.value);
+  const SetValue({required this.value});
   
   @override
   List<Object?> get props => [value];
