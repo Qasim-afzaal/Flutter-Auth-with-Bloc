@@ -2,7 +2,7 @@ import 'package:equatable/equatable.dart';
 
 /// Base class for all counter events
 /// All counter-related events must extend this class
-sealed class CounterEvent extends Equatable {
+abstract class CounterEvent extends Equatable {
   const CounterEvent();
 
   @override
@@ -14,7 +14,7 @@ sealed class CounterEvent extends Equatable {
 /// The counter will increase by 1, up to a maximum value of 100
 class IncreaseNumber extends CounterEvent {
   const IncreaseNumber();
-  
+
   @override
   String toString() => 'IncreaseNumber()';
 }
@@ -24,7 +24,7 @@ class IncreaseNumber extends CounterEvent {
 /// The counter will decrease by 1, down to a minimum value of -50
 class DecreaseNumber extends CounterEvent {
   const DecreaseNumber();
-  
+
   @override
   String toString() => 'DecreaseNumber()';
 }
@@ -34,7 +34,7 @@ class DecreaseNumber extends CounterEvent {
 /// The counter will be set back to its initial value of 0
 class ResetNumber extends CounterEvent {
   const ResetNumber();
-  
+
   @override
   String toString() => 'ResetNumber()';
 }
@@ -44,7 +44,7 @@ class ResetNumber extends CounterEvent {
 /// The counter will be multiplied by 2, respecting max and min constraints
 class MultiplyNumber extends CounterEvent {
   const MultiplyNumber();
-  
+
   @override
   String toString() => 'MultiplyNumber()';
 }
@@ -54,7 +54,7 @@ class MultiplyNumber extends CounterEvent {
 /// The counter will be divided by 2, respecting max and min constraints
 class DivideNumber extends CounterEvent {
   const DivideNumber();
-  
+
   @override
   String toString() => 'DivideNumber()';
 }
@@ -63,13 +63,14 @@ class DivideNumber extends CounterEvent {
 /// This event allows setting the counter to any value within the allowed range
 /// The value will be clamped to min/max constraints if outside bounds
 class SetValue extends CounterEvent {
+  /// The target value to set the counter to
   final int value;
-  
-  const SetValue({required this.value});
-  
+
+  const SetValue(this.value);
+
   @override
   List<Object?> get props => [value];
-  
+
   @override
   String toString() => 'SetValue(value: $value)';
 }
