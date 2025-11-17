@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 
 /// Base class for all counter events
 /// All counter-related events must extend this class
+/// 
+/// Uses Equatable for value-based equality comparison
 abstract class CounterEvent extends Equatable {
   const CounterEvent();
 
