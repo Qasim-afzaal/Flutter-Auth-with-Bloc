@@ -9,6 +9,7 @@ import 'package:equatable/equatable.dart';
 /// All counter-related events must extend this class
 /// 
 /// Uses Equatable for value-based equality comparison
+/// All events are immutable and can be safely reused
 abstract class CounterEvent extends Equatable {
   const CounterEvent();
 
