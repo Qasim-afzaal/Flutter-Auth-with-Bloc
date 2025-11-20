@@ -1,6 +1,8 @@
 /// Counter events for the BLoC pattern
 /// 
 /// This library defines all events that can be dispatched to the counter BLoC
+/// 
+/// All events follow the BLoC pattern and are thread-safe
 library;
 
 import 'package:equatable/equatable.dart';
