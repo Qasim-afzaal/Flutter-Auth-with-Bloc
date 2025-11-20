@@ -19,6 +19,8 @@ abstract class CounterEvent extends Equatable {
 /// Event to increase the counter value by 1
 /// This event is dispatched when the user taps the increment button
 /// The counter will increase by 1, up to a maximum value of 100
+/// 
+/// Increment amount: +1
 class IncreaseNumber extends CounterEvent {
   const IncreaseNumber();
 
