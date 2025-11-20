@@ -67,6 +67,8 @@ class MultiplyNumber extends CounterEvent {
 /// Event to divide the counter value by 2
 /// This event is dispatched when the user wants to halve the current value
 /// The counter will be divided by 2, respecting max and min constraints
+/// 
+/// Division factor: ÷2
 class DivideNumber extends CounterEvent {
   const DivideNumber();
 
