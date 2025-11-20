@@ -1,3 +1,8 @@
+/// Counter events for the BLoC pattern
+/// 
+/// This library defines all events that can be dispatched to the counter BLoC
+library;
+
 import 'package:equatable/equatable.dart';
 
 /// Base class for all counter events
