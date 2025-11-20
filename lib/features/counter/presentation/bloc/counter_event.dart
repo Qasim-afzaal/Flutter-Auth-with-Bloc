@@ -43,6 +43,8 @@ class DecreaseNumber extends CounterEvent {
 /// Event to reset the counter value to 0
 /// This event is dispatched when the user taps the reset button
 /// The counter will be set back to its initial value of 0
+/// 
+/// Reset value: 0
 class ResetNumber extends CounterEvent {
   const ResetNumber();
 
