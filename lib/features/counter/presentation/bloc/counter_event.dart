@@ -88,6 +88,7 @@ class SetValue extends CounterEvent {
 
   const SetValue(this.value);
 
+  /// Props used for equality comparison by Equatable
   @override
   List<Object?> get props => [value];
 
