@@ -79,6 +79,8 @@ class DivideNumber extends CounterEvent {
 /// Event to set the counter to a specific value
 /// This event allows setting the counter to any value within the allowed range
 /// The value will be clamped to min/max constraints if outside bounds
+/// 
+/// Example: SetValue(42) sets the counter to 42
 class SetValue extends CounterEvent {
   /// The target value to set the counter to
   final int value;
