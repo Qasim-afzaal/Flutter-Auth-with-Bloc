@@ -55,6 +55,8 @@ class ResetNumber extends CounterEvent {
 /// Event to multiply the counter value by 2
 /// This event is dispatched when the user wants to double the current value
 /// The counter will be multiplied by 2, respecting max and min constraints
+/// 
+/// Multiplication factor: 2x
 class MultiplyNumber extends CounterEvent {
   const MultiplyNumber();
 
