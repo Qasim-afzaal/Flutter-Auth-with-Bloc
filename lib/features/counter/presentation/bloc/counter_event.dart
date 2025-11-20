@@ -31,6 +31,8 @@ class IncreaseNumber extends CounterEvent {
 /// Event to decrease the counter value by 1
 /// This event is dispatched when the user taps the decrement button
 /// The counter will decrease by 1, down to a minimum value of -50
+/// 
+/// Decrement amount: -1
 class DecreaseNumber extends CounterEvent {
   const DecreaseNumber();
 
