@@ -26,6 +26,7 @@ abstract class CounterEvent extends Equatable {
 /// 
 /// Increment amount: +1
 class IncreaseNumber extends CounterEvent {
+  /// Creates an event to increment the counter
   const IncreaseNumber();
 
   @override
