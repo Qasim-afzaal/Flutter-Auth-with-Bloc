@@ -29,6 +29,7 @@ class IncreaseNumber extends CounterEvent {
   /// Creates an event to increment the counter
   const IncreaseNumber();
 
+  /// Returns a string representation for debugging purposes
   @override
   String toString() => 'IncreaseNumber()';
 }
