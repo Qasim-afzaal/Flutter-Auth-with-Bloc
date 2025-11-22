@@ -15,6 +15,7 @@ import 'package:equatable/equatable.dart';
 abstract class CounterEvent extends Equatable {
   const CounterEvent();
 
+  /// Empty props list since base class has no fields
   @override
   List<Object?> get props => [];
 }
