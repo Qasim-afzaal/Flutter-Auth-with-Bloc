@@ -94,6 +94,9 @@ class SetValue extends CounterEvent {
   /// The target value to set the counter to
   final int value;
 
+  /// Creates an event to set the counter to a specific value
+  /// 
+  /// [value] The target value to set the counter to
   const SetValue(this.value);
 
   /// Props used for equality comparison by Equatable
