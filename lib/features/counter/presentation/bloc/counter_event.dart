@@ -39,6 +39,7 @@ class IncreaseNumber extends CounterEvent {
 /// 
 /// Decrement amount: -1
 class DecreaseNumber extends CounterEvent {
+  /// Creates an event to decrement the counter
   const DecreaseNumber();
 
   @override
