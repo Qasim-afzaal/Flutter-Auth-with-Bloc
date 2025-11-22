@@ -13,6 +13,7 @@ import 'package:equatable/equatable.dart';
 /// Uses Equatable for value-based equality comparison
 /// All events are immutable and can be safely reused
 abstract class CounterEvent extends Equatable {
+  /// Creates a new counter event instance
   const CounterEvent();
 
   /// Empty props list since base class has no fields
