@@ -65,6 +65,7 @@ class ResetNumber extends CounterEvent {
 /// 
 /// Multiplication factor: 2x
 class MultiplyNumber extends CounterEvent {
+  /// Creates an event to multiply the counter by 2
   const MultiplyNumber();
 
   @override
