@@ -105,6 +105,7 @@ class SetValue extends CounterEvent {
   @override
   List<Object?> get props => [value];
 
+  /// Returns a string representation including the value for debugging
   @override
   String toString() => 'SetValue(value: $value)';
 }
