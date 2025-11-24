@@ -13,10 +13,9 @@ import 'package:equatable/equatable.dart';
 /// Uses Equatable for value-based equality comparison
 /// All events are immutable and can be safely reused
 abstract class CounterEvent extends Equatable {
-  /// Creates a new counter event instance
   const CounterEvent();
 
-  /// Empty props list since base class has no fields
+  /// Empty props list since the base class has no fields to compare
   @override
   List<Object?> get props => [];
 }
@@ -27,10 +26,9 @@ abstract class CounterEvent extends Equatable {
 /// 
 /// Increment amount: +1
 class IncreaseNumber extends CounterEvent {
-  /// Creates an event to increment the counter
+  /// Creates a new [IncreaseNumber] event instance
   const IncreaseNumber();
 
-  /// Returns a string representation for debugging purposes
   @override
   String toString() => 'IncreaseNumber()';
 }
@@ -41,7 +39,6 @@ class IncreaseNumber extends CounterEvent {
 /// 
 /// Decrement amount: -1
 class DecreaseNumber extends CounterEvent {
-  /// Creates an event to decrement the counter
   const DecreaseNumber();
 
   @override
@@ -54,7 +51,6 @@ class DecreaseNumber extends CounterEvent {
 /// 
 /// Reset value: 0
 class ResetNumber extends CounterEvent {
-  /// Creates an event to reset the counter to zero
   const ResetNumber();
 
   @override
@@ -67,7 +63,6 @@ class ResetNumber extends CounterEvent {
 /// 
 /// Multiplication factor: 2x
 class MultiplyNumber extends CounterEvent {
-  /// Creates an event to multiply the counter by 2
   const MultiplyNumber();
 
   @override
@@ -80,7 +75,6 @@ class MultiplyNumber extends CounterEvent {
 /// 
 /// Division factor: ÷2
 class DivideNumber extends CounterEvent {
-  /// Creates an event to divide the counter by 2
   const DivideNumber();
 
   @override
@@ -96,16 +90,12 @@ class SetValue extends CounterEvent {
   /// The target value to set the counter to
   final int value;
 
-  /// Creates an event to set the counter to a specific value
-  /// 
-  /// [value] The target value to set the counter to
   const SetValue(this.value);
 
   /// Props used for equality comparison by Equatable
   @override
   List<Object?> get props => [value];
 
-  /// Returns a string representation including the value for debugging
   @override
   String toString() => 'SetValue(value: $value)';
 }
