@@ -71,6 +71,7 @@ class MultiplyNumber extends CounterEvent {
   /// Creates a new [MultiplyNumber] event instance
   const MultiplyNumber();
 
+  /// Returns a string representation for debugging purposes
   @override
   String toString() => 'MultiplyNumber()';
 }
