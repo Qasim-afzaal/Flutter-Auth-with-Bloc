@@ -78,6 +78,7 @@ class MultiplyNumber extends CounterEvent {
 /// 
 /// Division factor: ÷2
 class DivideNumber extends CounterEvent {
+  /// Creates a new [DivideNumber] event instance
   const DivideNumber();
 
   @override
