@@ -85,6 +85,7 @@ class DivideNumber extends CounterEvent {
   /// Creates a new [DivideNumber] event instance
   const DivideNumber();
 
+  /// Returns a string representation for debugging purposes
   @override
   String toString() => 'DivideNumber()';
 }
