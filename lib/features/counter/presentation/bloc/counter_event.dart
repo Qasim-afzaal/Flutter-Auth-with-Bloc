@@ -52,6 +52,7 @@ class DecreaseNumber extends CounterEvent {
 /// 
 /// Reset value: 0
 class ResetNumber extends CounterEvent {
+  /// Creates a new [ResetNumber] event instance
   const ResetNumber();
 
   @override
