@@ -43,6 +43,7 @@ class DecreaseNumber extends CounterEvent {
   /// Creates a new [DecreaseNumber] event instance
   const DecreaseNumber();
 
+  /// Returns a string representation for debugging purposes
   @override
   String toString() => 'DecreaseNumber()';
 }
