@@ -57,6 +57,7 @@ class ResetNumber extends CounterEvent {
   /// Creates a new [ResetNumber] event instance
   const ResetNumber();
 
+  /// Returns a string representation for debugging purposes
   @override
   String toString() => 'ResetNumber()';
 }
