@@ -143,6 +143,18 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     return false;
   }
   
+  /// Redoes the last undone operation by restoring the next value from history
+  /// Returns true if redo was successful, false if no future history available
+  bool redo() {
+    if (_historyIndex < _history.length - 1) {
+      _historyIndex++;
+      final nextValue = _history[_historyIndex];
+      emit(CounterValueChanged(nextValue));
+      return true;
+    }
+    return false;
+  }
+  
   /// Gets the current counter status as a string
   /// Returns descriptive status based on current value
   String getCounterStatus() {
