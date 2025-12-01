@@ -18,6 +18,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<MultiplyNumber>(_onMultiplyPressed);
     on<DivideNumber>(_onDividePressed);
     on<SetValue>(_onSetValue);
+    on<AddByAmount>(_onAddByAmount);
   }
   
   /// Adds a value to the history
@@ -111,6 +112,17 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     } else {
       emit(CounterValueChanged(event.value));
     }
+  }
+  
+  /// Handles add by amount event - adds a custom amount to the counter
+  /// Clamps the value to min/max constraints if outside bounds
+  void _onAddByAmount(
+    AddByAmount event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value + event.amount;
+    final clampedValue = _clampValue(newValue);
+    emit(CounterValueChanged(clampedValue));
   }
   
   /// Helper method to check if counter value is within bounds
