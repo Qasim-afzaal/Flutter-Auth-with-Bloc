@@ -7,6 +7,10 @@ import 'counter_state.dart';
 /// Handles increment, decrement, reset, multiply, and divide operations
 /// All operations respect the min and max value constraints defined in AppConstants
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
+  /// History of counter values for undo/redo functionality
+  final List<int> _history = [0];
+  int _historyIndex = 0;
+
   CounterBloc() : super(const CounterInitial()) {
     on<IncreaseNumber>(_onIncrementPressed);
     on<DecreaseNumber>(_onDecrementPressed);
@@ -14,6 +18,21 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<MultiplyNumber>(_onMultiplyPressed);
     on<DivideNumber>(_onDividePressed);
     on<SetValue>(_onSetValue);
+  }
+  
+  /// Adds a value to the history
+  void _addToHistory(int value) {
+    // Remove any future history if we're not at the end
+    if (_historyIndex < _history.length - 1) {
+      _history.removeRange(_historyIndex + 1, _history.length);
+    }
+    _history.add(value);
+    _historyIndex = _history.length - 1;
+    // Limit history size to prevent memory issues
+    if (_history.length > 100) {
+      _history.removeAt(0);
+      _historyIndex--;
+    }
   }
   
   /// Handles increment event - increases counter by 1
