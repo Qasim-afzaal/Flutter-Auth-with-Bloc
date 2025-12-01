@@ -163,3 +163,16 @@ class SquareNumber extends CounterEvent {
   @override
   String toString() => 'SquareNumber()';
 }
+
+/// Event to get the absolute value of the counter
+/// This event sets the counter to its absolute value (removes negative sign)
+/// 
+/// Example: AbsoluteValue() converts -5 to 5
+class AbsoluteValue extends CounterEvent {
+  /// Creates a new [AbsoluteValue] event instance
+  const AbsoluteValue();
+
+  /// Returns a string representation for debugging purposes
+  @override
+  String toString() => 'AbsoluteValue()';
+}
