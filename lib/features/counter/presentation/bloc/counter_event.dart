@@ -109,3 +109,23 @@ class SetValue extends CounterEvent {
   @override
   String toString() => 'SetValue(value: $value)';
 }
+
+/// Event to add a custom amount to the counter value
+/// This event allows incrementing the counter by any specified amount
+/// The value will be clamped to min/max constraints if outside bounds
+/// 
+/// Example: AddByAmount(5) adds 5 to the current counter value
+class AddByAmount extends CounterEvent {
+  /// The amount to add to the counter
+  final int amount;
+
+  /// Creates a new [AddByAmount] event instance with the specified [amount]
+  const AddByAmount(this.amount);
+
+  /// Props used for equality comparison by Equatable
+  @override
+  List<Object?> get props => [amount];
+
+  @override
+  String toString() => 'AddByAmount(amount: $amount)';
+}
