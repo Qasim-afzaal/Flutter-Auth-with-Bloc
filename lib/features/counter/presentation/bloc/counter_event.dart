@@ -190,3 +190,17 @@ class IncrementByTen extends CounterEvent {
   @override
   String toString() => 'IncrementByTen()';
 }
+
+/// Event to decrease the counter value by 10
+/// This event is dispatched when the user wants to decrement by 10
+/// The counter will decrease by 10, down to a minimum value of -50
+/// 
+/// Decrement amount: -10
+class DecrementByTen extends CounterEvent {
+  /// Creates a new [DecrementByTen] event instance
+  const DecrementByTen();
+
+  /// Returns a string representation for debugging purposes
+  @override
+  String toString() => 'DecrementByTen()';
+}
