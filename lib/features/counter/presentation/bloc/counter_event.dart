@@ -149,3 +149,17 @@ class SubtractByAmount extends CounterEvent {
   @override
   String toString() => 'SubtractByAmount(amount: $amount)';
 }
+
+/// Event to square the counter value
+/// This event multiplies the counter by itself
+/// The value will be clamped to min/max constraints if outside bounds
+/// 
+/// Example: SquareNumber() squares the current counter value
+class SquareNumber extends CounterEvent {
+  /// Creates a new [SquareNumber] event instance
+  const SquareNumber();
+
+  /// Returns a string representation for debugging purposes
+  @override
+  String toString() => 'SquareNumber()';
+}
