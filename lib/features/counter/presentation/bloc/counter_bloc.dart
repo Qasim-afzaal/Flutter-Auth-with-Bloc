@@ -21,6 +21,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<AddByAmount>(_onAddByAmount);
     on<SubtractByAmount>(_onSubtractByAmount);
     on<SquareNumber>(_onSquareNumber);
+    on<AbsoluteValue>(_onAbsoluteValue);
   }
   
   /// Adds a value to the history
@@ -147,6 +148,15 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     final newValue = state.value * state.value;
     final clampedValue = _clampValue(newValue);
     emit(CounterValueChanged(clampedValue));
+  }
+  
+  /// Handles absolute value event - sets counter to its absolute value
+  void _onAbsoluteValue(
+    AbsoluteValue event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value.abs();
+    emit(CounterValueChanged(newValue));
   }
   
   /// Helper method to check if counter value is within bounds
