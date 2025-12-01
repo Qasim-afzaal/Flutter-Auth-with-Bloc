@@ -75,3 +75,13 @@ class CounterError extends CounterState {
   @override
   String toString() => 'CounterError(value: $value, errorMessage: $errorMessage)';
 }
+
+/// State emitted when a counter operation is in progress
+/// Used for async operations or when loading state is needed
+/// Contains the current counter value
+class CounterLoading extends CounterState {
+  const CounterLoading(int currentValue) : super(currentValue);
+  
+  @override
+  String toString() => 'CounterLoading(value: $value)';
+}
