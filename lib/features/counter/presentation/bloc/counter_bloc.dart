@@ -62,10 +62,15 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   
   /// Handles divide event - divides counter by 2
   /// Prevents counter from going below minimum value defined in AppConstants
+  /// Handles division by zero error
   void _onDividePressed(
     DivideNumber event,
     Emitter<CounterState> emit,
   ) {
+    if (AppConstants.halfDivisor == 0) {
+      emit(CounterError('Cannot divide by zero', state.value));
+      return;
+    }
     final newValue = state.value ~/ AppConstants.halfDivisor;
     if (newValue >= AppConstants.counterMinValue) {
       emit(CounterValueChanged(newValue));
