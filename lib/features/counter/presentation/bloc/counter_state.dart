@@ -61,3 +61,17 @@ class CounterHistory extends CounterState {
   @override
   String toString() => 'CounterHistory(value: $value, history: $history)';
 }
+
+/// State emitted when an error occurs in counter operations
+/// Contains the error message and the current counter value
+class CounterError extends CounterState {
+  final String errorMessage;
+  
+  const CounterError(this.errorMessage, int currentValue) : super(currentValue);
+  
+  @override
+  List<Object?> get props => [errorMessage, value];
+  
+  @override
+  String toString() => 'CounterError(value: $value, errorMessage: $errorMessage)';
+}
