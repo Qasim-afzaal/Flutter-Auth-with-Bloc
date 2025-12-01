@@ -81,12 +81,17 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   
   /// Handles set value event - sets counter to a specific value
   /// Clamps the value to min/max constraints if outside bounds
+  /// Validates the input value before setting
   void _onSetValue(
     SetValue event,
     Emitter<CounterState> emit,
   ) {
-    final clampedValue = _clampValue(event.value);
-    emit(CounterValueChanged(clampedValue));
+    if (!_isWithinBounds(event.value)) {
+      final clampedValue = _clampValue(event.value);
+      emit(CounterValueChanged(clampedValue));
+    } else {
+      emit(CounterValueChanged(event.value));
+    }
   }
   
   /// Helper method to check if counter value is within bounds
