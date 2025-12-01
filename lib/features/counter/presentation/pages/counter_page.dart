@@ -96,7 +96,46 @@ class CounterView extends StatelessWidget {
                   icon: const Icon(Icons.add),
                   label: const Text('Increase'),
                 ),
-                
+              ],
+            ),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              alignment: WrapAlignment.center,
+              children: [
+                FloatingActionButton(
+                  onPressed: () {
+                    context.read<CounterBloc>().add(IncrementByTen());
+                  },
+                  tooltip: 'Increment by 10',
+                  heroTag: 'increment10',
+                  child: const Text('+10'),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    context.read<CounterBloc>().add(DecrementByTen());
+                  },
+                  tooltip: 'Decrement by 10',
+                  heroTag: 'decrement10',
+                  child: const Text('-10'),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    context.read<CounterBloc>().add(SquareNumber());
+                  },
+                  tooltip: 'Square',
+                  heroTag: 'square',
+                  child: const Text('x²'),
+                ),
+                FloatingActionButton(
+                  onPressed: () {
+                    context.read<CounterBloc>().add(AbsoluteValue());
+                  },
+                  tooltip: 'Absolute Value',
+                  heroTag: 'abs',
+                  child: const Text('|x|'),
+                ),
               ],
             ),
           ],
