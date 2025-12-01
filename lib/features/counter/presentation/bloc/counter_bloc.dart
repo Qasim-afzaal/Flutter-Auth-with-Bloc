@@ -20,6 +20,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<SetValue>(_onSetValue);
     on<AddByAmount>(_onAddByAmount);
     on<SubtractByAmount>(_onSubtractByAmount);
+    on<SquareNumber>(_onSquareNumber);
   }
   
   /// Adds a value to the history
@@ -133,6 +134,17 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     Emitter<CounterState> emit,
   ) {
     final newValue = state.value - event.amount;
+    final clampedValue = _clampValue(newValue);
+    emit(CounterValueChanged(clampedValue));
+  }
+  
+  /// Handles square number event - squares the counter value
+  /// Clamps the value to min/max constraints if outside bounds
+  void _onSquareNumber(
+    SquareNumber event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value * state.value;
     final clampedValue = _clampValue(newValue);
     emit(CounterValueChanged(clampedValue));
   }
