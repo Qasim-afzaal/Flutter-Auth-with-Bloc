@@ -129,3 +129,23 @@ class AddByAmount extends CounterEvent {
   @override
   String toString() => 'AddByAmount(amount: $amount)';
 }
+
+/// Event to subtract a custom amount from the counter value
+/// This event allows decrementing the counter by any specified amount
+/// The value will be clamped to min/max constraints if outside bounds
+/// 
+/// Example: SubtractByAmount(5) subtracts 5 from the current counter value
+class SubtractByAmount extends CounterEvent {
+  /// The amount to subtract from the counter
+  final int amount;
+
+  /// Creates a new [SubtractByAmount] event instance with the specified [amount]
+  const SubtractByAmount(this.amount);
+
+  /// Props used for equality comparison by Equatable
+  @override
+  List<Object?> get props => [amount];
+
+  @override
+  String toString() => 'SubtractByAmount(amount: $amount)';
+}
