@@ -176,3 +176,17 @@ class AbsoluteValue extends CounterEvent {
   @override
   String toString() => 'AbsoluteValue()';
 }
+
+/// Event to increase the counter value by 10
+/// This event is dispatched when the user wants to increment by 10
+/// The counter will increase by 10, up to a maximum value of 100
+/// 
+/// Increment amount: +10
+class IncrementByTen extends CounterEvent {
+  /// Creates a new [IncrementByTen] event instance
+  const IncrementByTen();
+
+  /// Returns a string representation for debugging purposes
+  @override
+  String toString() => 'IncrementByTen()';
+}
