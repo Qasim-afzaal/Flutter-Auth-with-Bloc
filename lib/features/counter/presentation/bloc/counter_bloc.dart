@@ -23,6 +23,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<SquareNumber>(_onSquareNumber);
     on<AbsoluteValue>(_onAbsoluteValue);
     on<IncrementByTen>(_onIncrementByTen);
+    on<DecrementByTen>(_onDecrementByTen);
   }
   
   /// Adds a value to the history
@@ -171,6 +172,20 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       emit(CounterValueChanged(newValue));
     } else {
       emit(const CounterValueChanged(AppConstants.counterMaxValue));
+    }
+  }
+  
+  /// Handles decrement by ten event - decreases counter by 10
+  /// Prevents counter from going below minimum value defined in AppConstants
+  void _onDecrementByTen(
+    DecrementByTen event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value - 10;
+    if (newValue >= AppConstants.counterMinValue) {
+      emit(CounterValueChanged(newValue));
+    } else {
+      emit(const CounterValueChanged(AppConstants.counterMinValue));
     }
   }
   
