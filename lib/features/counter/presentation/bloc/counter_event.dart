@@ -110,51 +110,11 @@ class SetValue extends CounterEvent {
   String toString() => 'SetValue(value: $value)';
 }
 
-/// Event to add a custom amount to the counter value
-/// This event allows incrementing the counter by any specified amount
-/// The value will be clamped to min/max constraints if outside bounds
-/// 
-/// Example: AddByAmount(5) adds 5 to the current counter value
-class AddByAmount extends CounterEvent {
-  /// The amount to add to the counter
-  final int amount;
-
-  /// Creates a new [AddByAmount] event instance with the specified [amount]
-  const AddByAmount(this.amount);
-
-  /// Props used for equality comparison by Equatable
-  @override
-  List<Object?> get props => [amount];
-
-  @override
-  String toString() => 'AddByAmount(amount: $amount)';
-}
-
-/// Event to subtract a custom amount from the counter value
-/// This event allows decrementing the counter by any specified amount
-/// The value will be clamped to min/max constraints if outside bounds
-/// 
-/// Example: SubtractByAmount(5) subtracts 5 from the current counter value
-class SubtractByAmount extends CounterEvent {
-  /// The amount to subtract from the counter
-  final int amount;
-
-  /// Creates a new [SubtractByAmount] event instance with the specified [amount]
-  const SubtractByAmount(this.amount);
-
-  /// Props used for equality comparison by Equatable
-  @override
-  List<Object?> get props => [amount];
-
-  @override
-  String toString() => 'SubtractByAmount(amount: $amount)';
-}
-
 /// Event to square the counter value
-/// This event multiplies the counter by itself
-/// The value will be clamped to min/max constraints if outside bounds
+/// This event is dispatched when the user wants to square the current value
+/// The counter will be squared (value * value), respecting max and min constraints
 /// 
-/// Example: SquareNumber() squares the current counter value
+/// Square operation: value²
 class SquareNumber extends CounterEvent {
   /// Creates a new [SquareNumber] event instance
   const SquareNumber();
@@ -162,45 +122,4 @@ class SquareNumber extends CounterEvent {
   /// Returns a string representation for debugging purposes
   @override
   String toString() => 'SquareNumber()';
-}
-
-/// Event to get the absolute value of the counter
-/// This event sets the counter to its absolute value (removes negative sign)
-/// 
-/// Example: AbsoluteValue() converts -5 to 5
-class AbsoluteValue extends CounterEvent {
-  /// Creates a new [AbsoluteValue] event instance
-  const AbsoluteValue();
-
-  /// Returns a string representation for debugging purposes
-  @override
-  String toString() => 'AbsoluteValue()';
-}
-
-/// Event to increase the counter value by 10
-/// This event is dispatched when the user wants to increment by 10
-/// The counter will increase by 10, up to a maximum value of 100
-/// 
-/// Increment amount: +10
-class IncrementByTen extends CounterEvent {
-  /// Creates a new [IncrementByTen] event instance
-  const IncrementByTen();
-
-  /// Returns a string representation for debugging purposes
-  @override
-  String toString() => 'IncrementByTen()';
-}
-
-/// Event to decrease the counter value by 10
-/// This event is dispatched when the user wants to decrement by 10
-/// The counter will decrease by 10, down to a minimum value of -50
-/// 
-/// Decrement amount: -10
-class DecrementByTen extends CounterEvent {
-  /// Creates a new [DecrementByTen] event instance
-  const DecrementByTen();
-
-  /// Returns a string representation for debugging purposes
-  @override
-  String toString() => 'DecrementByTen()';
 }
