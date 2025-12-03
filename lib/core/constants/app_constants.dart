@@ -53,4 +53,5 @@ class AppConstants {
   static const String errorAuthenticationFailed = 'Authentication failed. Please check your credentials.';
   static const String errorValidationFailed = 'Validation failed. Please check your input.';
   static const String errorUnknown = 'An unknown error occurred. Please try again.';
+  static const String errorCounterLimitReached = 'Counter limit reached. Cannot perform this operation.';
 }
