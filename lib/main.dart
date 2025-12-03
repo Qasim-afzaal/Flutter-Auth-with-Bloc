@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Auth BLoC - Flutter Clean Architecture',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.deepPurple,
@@ -39,7 +40,6 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: ThemeMode.system,
       home: const CounterPage(),
-      debugShowCheckedModeBanner: false,
     );
   }
 }
