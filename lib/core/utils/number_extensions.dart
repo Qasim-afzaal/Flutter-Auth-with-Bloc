@@ -20,5 +20,8 @@ extension NumberExtensions on int {
       (Match m) => '${m[1]},',
     );
   }
+  
+  /// Returns the absolute value of the number
+  int get absolute => this < 0 ? -this : this;
 }
 
