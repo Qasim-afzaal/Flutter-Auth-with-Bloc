@@ -39,5 +39,12 @@ class ColorUtils {
       (color.blue * (1 - factor)).round(),
     );
   }
+  
+  /// Checks if a color is dark (useful for determining text color)
+  /// Returns true if color is dark, false if light
+  static bool isDark(Color color) {
+    final luminance = color.computeLuminance();
+    return luminance < 0.5;
+  }
 }
 
