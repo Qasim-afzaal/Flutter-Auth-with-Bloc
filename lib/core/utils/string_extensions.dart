@@ -18,5 +18,8 @@ extension StringExtensions on String {
   
   /// Reverses the string
   String get reversed => split('').reversed.join();
+  
+  /// Removes all special characters, keeping only alphanumeric characters
+  String get alphanumericOnly => replaceAll(RegExp(r'[^a-zA-Z0-9]'), '');
 }
 
