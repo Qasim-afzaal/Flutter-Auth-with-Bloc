@@ -15,6 +15,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<DivideNumber>(_onDividePressed);
     on<SetValue>(_onSetValue);
     on<SquareNumber>(_onSquarePressed);
+    on<AbsoluteValue>(_onAbsoluteValuePressed);
   }
   
   /// Handles increment event - increases counter by 1
@@ -97,6 +98,16 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     } else {
       emit(const CounterValueChanged(AppConstants.counterMaxValue));
     }
+  }
+  
+  /// Handles absolute value event - converts counter to its absolute value
+  /// The absolute value is always positive or zero
+  void _onAbsoluteValuePressed(
+    AbsoluteValue event,
+    Emitter<CounterState> emit,
+  ) {
+    final absoluteValue = state.value < 0 ? -state.value : state.value;
+    emit(CounterValueChanged(absoluteValue));
   }
   
   /// Helper method to check if counter value is within bounds
