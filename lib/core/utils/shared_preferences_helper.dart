@@ -44,5 +44,14 @@ class SharedPreferencesHelper {
     // Placeholder implementation
     return true;
   }
+  
+  /// Checks if a key exists in local storage
+  /// Returns true if key exists, false otherwise
+  static Future<bool> containsKey(String key) async {
+    // Placeholder: In production, use shared_preferences package
+    // final prefs = await SharedPreferences.getInstance();
+    // return prefs.containsKey(key);
+    return false;
+  }
 }
 
