@@ -41,5 +41,18 @@ class ValidationUtils {
   static bool isInRange(int value, int min, int max) {
     return value >= min && value <= max;
   }
+  
+  /// Validates if a phone number is in correct format
+  /// Supports international format with optional country code
+  /// Returns true if phone number is valid, false otherwise
+  static bool isValidPhoneNumber(String phoneNumber) {
+    if (phoneNumber.isEmpty) return false;
+    
+    // Remove all non-digit characters
+    final digitsOnly = phoneNumber.replaceAll(RegExp(r'[^\d]'), '');
+    
+    // Phone number should be between 10 and 15 digits
+    return digitsOnly.length >= 10 && digitsOnly.length <= 15;
+  }
 }
 
