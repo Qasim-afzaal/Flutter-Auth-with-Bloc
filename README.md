@@ -63,9 +63,9 @@ lib/
 
 ### Counter Feature
 
-- **Events**: `IncreaseNumber`, `DecreaseNumber`, `ResetNumber`
-- **States**: `CounterInitial`, `CounterValueChanged`
-- **Bloc**: `CounterBloc` - handles all counter logic
+- **Events**: `IncreaseNumber`, `DecreaseNumber`, `ResetNumber`, `MultiplyNumber`, `DivideNumber`, `SetValue`, `SquareNumber`, `AbsoluteValue`
+- **States**: `CounterInitial`, `CounterValueChanged`, `CounterMaxReached`, `CounterMinReached`, `CounterHistory`
+- **Bloc**: `CounterBloc` - handles all counter logic with advanced operations
 
 ### Authentication Feature
 
