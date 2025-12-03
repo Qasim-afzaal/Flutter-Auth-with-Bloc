@@ -123,3 +123,17 @@ class SquareNumber extends CounterEvent {
   @override
   String toString() => 'SquareNumber()';
 }
+
+/// Event to get the absolute value of the counter
+/// This event is dispatched when the user wants to convert the value to its absolute value
+/// The counter will be set to its absolute value, respecting max and min constraints
+/// 
+/// Absolute operation: |value|
+class AbsoluteValue extends CounterEvent {
+  /// Creates a new [AbsoluteValue] event instance
+  const AbsoluteValue();
+
+  /// Returns a string representation for debugging purposes
+  @override
+  String toString() => 'AbsoluteValue()';
+}
