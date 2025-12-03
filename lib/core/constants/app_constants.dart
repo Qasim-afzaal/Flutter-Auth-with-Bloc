@@ -20,6 +20,7 @@ class AppConstants {
   static const int decrementStep = 1;
   static const int doubleMultiplier = 2;
   static const int halfDivisor = 2;
+  static const int squareExponent = 2;
   
   // UI Configuration
   static const double defaultPadding = 16.0;
