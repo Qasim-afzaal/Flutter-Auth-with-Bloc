@@ -7,10 +7,6 @@ import 'counter_state.dart';
 /// Handles increment, decrement, reset, multiply, and divide operations
 /// All operations respect the min and max value constraints defined in AppConstants
 class CounterBloc extends Bloc<CounterEvent, CounterState> {
-  /// History of counter values for undo/redo functionality
-  final List<int> _history = [0];
-  int _historyIndex = 0;
-
   CounterBloc() : super(const CounterInitial()) {
     on<IncreaseNumber>(_onIncrementPressed);
     on<DecreaseNumber>(_onDecrementPressed);
@@ -18,27 +14,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<MultiplyNumber>(_onMultiplyPressed);
     on<DivideNumber>(_onDividePressed);
     on<SetValue>(_onSetValue);
-    on<AddByAmount>(_onAddByAmount);
-    on<SubtractByAmount>(_onSubtractByAmount);
-    on<SquareNumber>(_onSquareNumber);
-    on<AbsoluteValue>(_onAbsoluteValue);
-    on<IncrementByTen>(_onIncrementByTen);
-    on<DecrementByTen>(_onDecrementByTen);
-  }
-  
-  /// Adds a value to the history
-  void _addToHistory(int value) {
-    // Remove any future history if we're not at the end
-    if (_historyIndex < _history.length - 1) {
-      _history.removeRange(_historyIndex + 1, _history.length);
-    }
-    _history.add(value);
-    _historyIndex = _history.length - 1;
-    // Limit history size to prevent memory issues
-    if (_history.length > 100) {
-      _history.removeAt(0);
-      _historyIndex--;
-    }
+    on<SquareNumber>(_onSquarePressed);
   }
   
   /// Handles increment event - increases counter by 1
@@ -87,15 +63,10 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   
   /// Handles divide event - divides counter by 2
   /// Prevents counter from going below minimum value defined in AppConstants
-  /// Handles division by zero error
   void _onDividePressed(
     DivideNumber event,
     Emitter<CounterState> emit,
   ) {
-    if (AppConstants.halfDivisor == 0) {
-      emit(CounterError('Cannot divide by zero', state.value));
-      return;
-    }
     final newValue = state.value ~/ AppConstants.halfDivisor;
     if (newValue >= AppConstants.counterMinValue) {
       emit(CounterValueChanged(newValue));
@@ -106,86 +77,25 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   
   /// Handles set value event - sets counter to a specific value
   /// Clamps the value to min/max constraints if outside bounds
-  /// Validates the input value before setting
   void _onSetValue(
     SetValue event,
     Emitter<CounterState> emit,
   ) {
-    if (!_isWithinBounds(event.value)) {
-      final clampedValue = _clampValue(event.value);
-      emit(CounterValueChanged(clampedValue));
-    } else {
-      emit(CounterValueChanged(event.value));
-    }
-  }
-  
-  /// Handles add by amount event - adds a custom amount to the counter
-  /// Clamps the value to min/max constraints if outside bounds
-  void _onAddByAmount(
-    AddByAmount event,
-    Emitter<CounterState> emit,
-  ) {
-    final newValue = state.value + event.amount;
-    final clampedValue = _clampValue(newValue);
+    final clampedValue = _clampValue(event.value);
     emit(CounterValueChanged(clampedValue));
   }
   
-  /// Handles subtract by amount event - subtracts a custom amount from the counter
-  /// Clamps the value to min/max constraints if outside bounds
-  void _onSubtractByAmount(
-    SubtractByAmount event,
-    Emitter<CounterState> emit,
-  ) {
-    final newValue = state.value - event.amount;
-    final clampedValue = _clampValue(newValue);
-    emit(CounterValueChanged(clampedValue));
-  }
-  
-  /// Handles square number event - squares the counter value
-  /// Clamps the value to min/max constraints if outside bounds
-  void _onSquareNumber(
+  /// Handles square event - squares the counter value
+  /// Prevents counter from exceeding maximum value defined in AppConstants
+  void _onSquarePressed(
     SquareNumber event,
     Emitter<CounterState> emit,
   ) {
     final newValue = state.value * state.value;
-    final clampedValue = _clampValue(newValue);
-    emit(CounterValueChanged(clampedValue));
-  }
-  
-  /// Handles absolute value event - sets counter to its absolute value
-  void _onAbsoluteValue(
-    AbsoluteValue event,
-    Emitter<CounterState> emit,
-  ) {
-    final newValue = state.value.abs();
-    emit(CounterValueChanged(newValue));
-  }
-  
-  /// Handles increment by ten event - increases counter by 10
-  /// Prevents counter from exceeding maximum value defined in AppConstants
-  void _onIncrementByTen(
-    IncrementByTen event,
-    Emitter<CounterState> emit,
-  ) {
-    final newValue = state.value + 10;
     if (newValue <= AppConstants.counterMaxValue) {
       emit(CounterValueChanged(newValue));
     } else {
       emit(const CounterValueChanged(AppConstants.counterMaxValue));
-    }
-  }
-  
-  /// Handles decrement by ten event - decreases counter by 10
-  /// Prevents counter from going below minimum value defined in AppConstants
-  void _onDecrementByTen(
-    DecrementByTen event,
-    Emitter<CounterState> emit,
-  ) {
-    final newValue = state.value - 10;
-    if (newValue >= AppConstants.counterMinValue) {
-      emit(CounterValueChanged(newValue));
-    } else {
-      emit(const CounterValueChanged(AppConstants.counterMinValue));
     }
   }
   
@@ -205,30 +115,6 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       return AppConstants.counterMaxValue;
     }
     return value;
-  }
-  
-  /// Undoes the last operation by restoring the previous value from history
-  /// Returns true if undo was successful, false if no history available
-  bool undo() {
-    if (_historyIndex > 0) {
-      _historyIndex--;
-      final previousValue = _history[_historyIndex];
-      emit(CounterValueChanged(previousValue));
-      return true;
-    }
-    return false;
-  }
-  
-  /// Redoes the last undone operation by restoring the next value from history
-  /// Returns true if redo was successful, false if no future history available
-  bool redo() {
-    if (_historyIndex < _history.length - 1) {
-      _historyIndex++;
-      final nextValue = _history[_historyIndex];
-      emit(CounterValueChanged(nextValue));
-      return true;
-    }
-    return false;
   }
   
   /// Gets the current counter status as a string
