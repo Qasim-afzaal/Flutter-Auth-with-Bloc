@@ -144,4 +144,16 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       return 'Negative';
     }
   }
+  
+  /// Gets whether the counter is at its maximum value
+  /// Returns true if counter is at max, false otherwise
+  bool isAtMax() {
+    return state.value >= AppConstants.counterMaxValue;
+  }
+  
+  /// Gets whether the counter is at its minimum value
+  /// Returns true if counter is at min, false otherwise
+  bool isAtMin() {
+    return state.value <= AppConstants.counterMinValue;
+  }
 }
