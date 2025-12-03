@@ -37,5 +37,14 @@ class StringUtils {
     if (text.isEmpty) return text;
     return text.split(' ').map((word) => capitalize(word)).join(' ');
   }
+  
+  /// Formats a number with thousand separators
+  /// Converts 1000 to "1,000" and 1000000 to "1,000,000"
+  static String formatNumberWithCommas(int number) {
+    return number.toString().replaceAllMapped(
+      RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
+      (Match m) => '${m[1]},',
+    );
+  }
 }
 
