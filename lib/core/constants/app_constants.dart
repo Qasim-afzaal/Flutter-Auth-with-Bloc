@@ -45,6 +45,7 @@ class AppConstants {
   // App Version
   static const String appVersion = '1.0.0';
   static const String appBuildNumber = '1';
+  static const String appName = 'Auth BLoC';
   
   // Error Messages
   static const String errorNetworkConnection = 'Network connection error. Please check your internet connection.';
