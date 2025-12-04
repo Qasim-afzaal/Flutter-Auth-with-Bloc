@@ -65,5 +65,31 @@ class ValidationUtils {
     );
     return urlRegex.hasMatch(url);
   }
+  
+  /// Validates if a credit card number is in correct format (Luhn algorithm)
+  /// Returns true if credit card number is valid, false otherwise
+  static bool isValidCreditCard(String cardNumber) {
+    if (cardNumber.isEmpty) return false;
+    
+    // Remove spaces and dashes
+    final digitsOnly = cardNumber.replaceAll(RegExp(r'[\s-]'), '');
+    
+    // Must be 13-19 digits
+    if (digitsOnly.length < 13 || digitsOnly.length > 19) return false;
+    
+    // Luhn algorithm
+    int sum = 0;
+    bool alternate = false;
+    for (int i = digitsOnly.length - 1; i >= 0; i--) {
+      int digit = int.parse(digitsOnly[i]);
+      if (alternate) {
+        digit *= 2;
+        if (digit > 9) digit -= 9;
+      }
+      sum += digit;
+      alternate = !alternate;
+    }
+    return sum % 10 == 0;
+  }
 }
 
