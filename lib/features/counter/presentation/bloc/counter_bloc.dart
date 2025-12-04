@@ -16,6 +16,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<SetValue>(_onSetValue);
     on<SquareNumber>(_onSquarePressed);
     on<AbsoluteValue>(_onAbsoluteValuePressed);
+    on<PowerNumber>(_onPowerPressed);
   }
   
   /// Handles increment event - increases counter by 1
@@ -108,6 +109,33 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   ) {
     final absoluteValue = state.value < 0 ? -state.value : state.value;
     emit(CounterValueChanged(absoluteValue));
+  }
+  
+  /// Handles power event - raises counter to a specific power
+  /// Prevents counter from exceeding maximum value defined in AppConstants
+  void _onPowerPressed(
+    PowerNumber event,
+    Emitter<CounterState> emit,
+  ) {
+    if (event.exponent < 0) {
+      // Negative exponents not supported for integers
+      return;
+    }
+    final newValue = _power(state.value, event.exponent);
+    final clampedValue = _clampValue(newValue);
+    emit(CounterValueChanged(clampedValue));
+  }
+  
+  /// Calculates base raised to the power of exponent
+  /// Returns the result of base^exponent
+  int _power(int base, int exponent) {
+    if (exponent == 0) return 1;
+    if (exponent == 1) return base;
+    int result = 1;
+    for (int i = 0; i < exponent; i++) {
+      result *= base;
+    }
+    return result;
   }
   
   /// Helper method to check if counter value is within bounds
