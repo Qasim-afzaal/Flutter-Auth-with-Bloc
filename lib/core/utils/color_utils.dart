@@ -46,5 +46,11 @@ class ColorUtils {
     final luminance = color.computeLuminance();
     return luminance < 0.5;
   }
+  
+  /// Gets the appropriate text color (black or white) based on background color
+  /// Returns white if background is dark, black if light
+  static Color getTextColor(Color backgroundColor) {
+    return isDark(backgroundColor) ? Colors.white : Colors.black;
+  }
 }
 
