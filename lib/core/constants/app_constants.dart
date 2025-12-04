@@ -56,4 +56,9 @@ class AppConstants {
   static const String errorValidationFailed = 'Validation failed. Please check your input.';
   static const String errorUnknown = 'An unknown error occurred. Please try again.';
   static const String errorCounterLimitReached = 'Counter limit reached. Cannot perform this operation.';
+  static const String errorInvalidInput = 'Invalid input provided. Please check your data.';
+  
+  // Success Messages
+  static const String successOperationCompleted = 'Operation completed successfully.';
+  static const String successDataSaved = 'Data saved successfully.';
 }
