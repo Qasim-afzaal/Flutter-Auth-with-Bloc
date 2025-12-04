@@ -17,6 +17,7 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<SquareNumber>(_onSquarePressed);
     on<AbsoluteValue>(_onAbsoluteValuePressed);
     on<PowerNumber>(_onPowerPressed);
+    on<CubeNumber>(_onCubePressed);
   }
   
   /// Handles increment event - increases counter by 1
@@ -136,6 +137,17 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
       result *= base;
     }
     return result;
+  }
+  
+  /// Handles cube event - cubes the counter value
+  /// Prevents counter from exceeding maximum value defined in AppConstants
+  void _onCubePressed(
+    CubeNumber event,
+    Emitter<CounterState> emit,
+  ) {
+    final newValue = state.value * state.value * state.value;
+    final clampedValue = _clampValue(newValue);
+    emit(CounterValueChanged(clampedValue));
   }
   
   /// Helper method to check if counter value is within bounds
