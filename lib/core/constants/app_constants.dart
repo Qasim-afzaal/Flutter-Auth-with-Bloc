@@ -22,6 +22,7 @@ class AppConstants {
   static const int halfDivisor = 2;
   static const int squareExponent = 2;
   static const int defaultPowerExponent = 2;
+  static const int cubeExponent = 3;
   
   // UI Configuration
   static const double defaultPadding = 16.0;
