@@ -54,5 +54,16 @@ class ValidationUtils {
     // Phone number should be between 10 and 15 digits
     return digitsOnly.length >= 10 && digitsOnly.length <= 15;
   }
+  
+  /// Validates if a URL is in correct format
+  /// Returns true if URL is valid, false otherwise
+  static bool isValidUrl(String url) {
+    if (url.isEmpty) return false;
+    
+    final urlRegex = RegExp(
+      r'^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
+    );
+    return urlRegex.hasMatch(url);
+  }
 }
 
