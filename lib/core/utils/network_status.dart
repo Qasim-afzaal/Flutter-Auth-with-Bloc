@@ -31,5 +31,16 @@ class NetworkStatus {
     // Placeholder implementation
     return false;
   }
+  
+  /// Gets a human-readable network status message
+  /// Returns a descriptive string about the current network status
+  static Future<String> getNetworkStatusMessage() async {
+    final connected = await isConnected();
+    if (!connected) {
+      return 'No network connection';
+    }
+    final networkType = await getNetworkType();
+    return 'Connected via $networkType';
+  }
 }
 
