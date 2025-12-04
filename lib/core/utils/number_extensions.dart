@@ -23,5 +23,18 @@ extension NumberExtensions on int {
   
   /// Returns the absolute value of the number
   int get absolute => this < 0 ? -this : this;
+  
+  /// Raises the number to the power of exponent
+  /// Returns the result of this^exponent
+  int power(int exponent) {
+    if (exponent < 0) return 0;
+    if (exponent == 0) return 1;
+    if (exponent == 1) return this;
+    int result = 1;
+    for (int i = 0; i < exponent; i++) {
+      result *= this;
+    }
+    return result;
+  }
 }
 
