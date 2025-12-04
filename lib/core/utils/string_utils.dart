@@ -46,5 +46,16 @@ class StringUtils {
       (Match m) => '${m[1]},',
     );
   }
+  
+  /// Masks sensitive information in a string
+  /// Replaces characters with asterisks, keeping first and last characters visible
+  /// Example: "password" becomes "p*****d"
+  static String maskSensitive(String text, {int visibleChars = 1}) {
+    if (text.length <= visibleChars * 2) return '*' * text.length;
+    final start = text.substring(0, visibleChars);
+    final end = text.substring(text.length - visibleChars);
+    final masked = '*' * (text.length - visibleChars * 2);
+    return '$start$masked$end';
+  }
 }
 
