@@ -184,4 +184,13 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
   bool isAtMin() {
     return state.value <= AppConstants.counterMinValue;
   }
+  
+  /// Gets the percentage of the counter value relative to max value
+  /// Returns a value between 0.0 and 1.0
+  double getProgressPercentage() {
+    final range = AppConstants.counterMaxValue - AppConstants.counterMinValue;
+    if (range == 0) return 0.0;
+    final progress = state.value - AppConstants.counterMinValue;
+    return progress / range;
+  }
 }
