@@ -21,5 +21,14 @@ extension StringExtensions on String {
   
   /// Removes all special characters, keeping only alphanumeric characters
   String get alphanumericOnly => replaceAll(RegExp(r'[^a-zA-Z0-9]'), '');
+  
+  /// Checks if the string is a valid URL
+  bool get isValidUrl {
+    if (isEmpty) return false;
+    final urlRegex = RegExp(
+      r'^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)$',
+    );
+    return urlRegex.hasMatch(this);
+  }
 }
 
