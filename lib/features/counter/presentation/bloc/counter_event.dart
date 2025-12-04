@@ -157,3 +157,17 @@ class PowerNumber extends CounterEvent {
   @override
   String toString() => 'PowerNumber(exponent: $exponent)';
 }
+
+/// Event to cube the counter value
+/// This event is dispatched when the user wants to cube the current value
+/// The counter will be cubed (value * value * value), respecting max and min constraints
+/// 
+/// Cube operation: value³
+class CubeNumber extends CounterEvent {
+  /// Creates a new [CubeNumber] event instance
+  const CubeNumber();
+
+  /// Returns a string representation for debugging purposes
+  @override
+  String toString() => 'CubeNumber()';
+}
