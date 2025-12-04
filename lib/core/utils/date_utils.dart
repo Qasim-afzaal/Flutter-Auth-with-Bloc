@@ -48,5 +48,14 @@ class DateUtils {
       return formatDate(dateTime);
     }
   }
+  
+  /// Checks if a date is today
+  /// Returns true if the given date is today, false otherwise
+  static bool isToday(DateTime dateTime) {
+    final now = DateTime.now();
+    return dateTime.year == now.year &&
+           dateTime.month == now.month &&
+           dateTime.day == now.day;
+  }
 }
 
