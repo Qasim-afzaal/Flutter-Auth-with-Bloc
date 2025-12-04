@@ -31,5 +31,10 @@ class Logger {
       print('StackTrace: $stackTrace');
     }
   }
+  
+  /// Logs a verbose message (for detailed debugging)
+  static void verbose(String message) {
+    print('[VERBOSE] [${_getTimestamp()}] $message');
+  }
 }
 
