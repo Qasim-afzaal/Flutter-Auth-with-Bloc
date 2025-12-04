@@ -52,5 +52,17 @@ class NumberUtils {
     }
     return true;
   }
+  
+  /// Calculates the factorial of a number
+  /// Returns the factorial value (n!)
+  static int factorial(int number) {
+    if (number < 0) return 0;
+    if (number == 0 || number == 1) return 1;
+    int result = 1;
+    for (int i = 2; i <= number; i++) {
+      result *= i;
+    }
+    return result;
+  }
 }
 
