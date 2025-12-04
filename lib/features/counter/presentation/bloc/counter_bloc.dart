@@ -205,4 +205,16 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     final progress = state.value - AppConstants.counterMinValue;
     return progress / range;
   }
+  
+  /// Gets the distance from the current value to the maximum
+  /// Returns the number of steps needed to reach max
+  int getDistanceToMax() {
+    return AppConstants.counterMaxValue - state.value;
+  }
+  
+  /// Gets the distance from the current value to the minimum
+  /// Returns the number of steps needed to reach min
+  int getDistanceToMin() {
+    return state.value - AppConstants.counterMinValue;
+  }
 }
