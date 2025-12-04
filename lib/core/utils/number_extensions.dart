@@ -36,5 +36,8 @@ extension NumberExtensions on int {
     }
     return result;
   }
+  
+  /// Returns the cube of the number (this³)
+  int get cube => this * this * this;
 }
 
