@@ -137,3 +137,23 @@ class AbsoluteValue extends CounterEvent {
   @override
   String toString() => 'AbsoluteValue()';
 }
+
+/// Event to raise the counter value to a specific power
+/// This event is dispatched when the user wants to raise the current value to a power
+/// The counter will be raised to the specified power, respecting max and min constraints
+/// 
+/// Example: PowerNumber(3) raises value to the power of 3 (value³)
+class PowerNumber extends CounterEvent {
+  /// The exponent to raise the counter value to
+  final int exponent;
+
+  /// Creates a new [PowerNumber] event instance with the specified [exponent]
+  const PowerNumber(this.exponent);
+
+  /// Props used for equality comparison by Equatable
+  @override
+  List<Object?> get props => [exponent];
+
+  @override
+  String toString() => 'PowerNumber(exponent: $exponent)';
+}
