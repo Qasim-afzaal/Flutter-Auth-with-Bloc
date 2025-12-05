@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'injection/injection_container.dart' as di;
-import 'features/counter/presentation/pages/counter_page.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/auth/presentation/pages/auth_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -39,7 +42,10 @@ class MyApp extends StatelessWidget {
         ),
       ),
       themeMode: ThemeMode.system,
-      home: const CounterPage(),
+      home: BlocProvider(
+        create: (context) => di.sl<AuthBloc>()..add(AuthCheckRequested()),
+        child: const AuthPage(),
+      ),
     );
   }
 }

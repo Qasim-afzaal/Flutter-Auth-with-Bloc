@@ -3,7 +3,6 @@ import '../features/auth/data/repositories/auth_repository_impl.dart';
 import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:get_it/get_it.dart';
-import '../features/counter/presentation/bloc/counter_bloc.dart';
 
 /// Service locator instance for dependency injection
 /// Use this to access registered dependencies throughout the app
@@ -31,9 +30,5 @@ Future<void> init() async {
   // BLoCs are registered as factories to create new instances per widget tree
   sl.registerFactory(
     () => AuthBloc(authRepository: sl()),
-  );
-  
-  sl.registerFactory(
-    () => CounterBloc(),
   );
 }
