@@ -1,15 +1,17 @@
+import '../config/app_config.dart';
+
 class AppConstants {
-  // API Configuration
-  static const String baseUrl = 'http://3.92.114.189:3005/api';
-  static const String apiVersion = '';
+  // API Configuration - Uses AppConfig to load from environment
+  static String get baseUrl => AppConfig.baseUrl;
+  static String get apiVersion => AppConfig.apiVersion;
   
   // Storage Keys
   static const String tokenKey = 'auth_token';
   static const String userKey = 'user_data';
   
-  // Timeouts
-  static const int connectionTimeout = 30000; // 30 seconds
-  static const int receiveTimeout = 30000; // 30 seconds
+  // Timeouts - Uses AppConfig
+  static int get connectionTimeout => AppConfig.connectionTimeout;
+  static int get receiveTimeout => AppConfig.receiveTimeout;
   
   // Counter Configuration
   static const int counterMaxValue = 100;
