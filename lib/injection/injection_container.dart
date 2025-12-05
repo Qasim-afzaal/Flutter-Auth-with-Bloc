@@ -1,11 +1,10 @@
 import 'package:get_it/get_it.dart';
 import '../core/network/api_service.dart';
 import '../core/storage/secure_storage_service.dart';
+import '../core/theme/theme_service.dart';
 import '../features/auth/data/repositories/auth_repository_impl.dart';
 import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
-import '../features/theme/presentation/bloc/theme_bloc.dart';
-import '../features/theme/presentation/bloc/theme_event.dart';
 
 /// Service locator instance for dependency injection
 /// Use this to access registered dependencies throughout the app
@@ -52,11 +51,9 @@ Future<void> init() async {
     ),
   );
 
-  // Theme BLoC - Singleton to maintain theme state across app
-  // Uses SecureStorageService directly (simpler approach for theme)
+  // Theme Service - Simple ChangeNotifier (no BLoC needed for simple state)
+  // Singleton to maintain theme state across app
   sl.registerLazySingleton(
-    () => ThemeBloc(
-      storage: sl(),
-    )..add(ThemeLoadRequested()),
+    () => ThemeService(sl()),
   );
 }

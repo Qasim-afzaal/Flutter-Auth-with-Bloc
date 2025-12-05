@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/theme_bloc.dart';
-import '../bloc/theme_event.dart';
-import '../bloc/theme_state.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/theme/theme_service.dart';
 
 /// Theme Selector Widget
 /// Provides a menu to select theme mode (Light, Dark, System)
@@ -11,22 +9,21 @@ class ThemeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
+    return Consumer<ThemeService>(
+      builder: (context, themeService, child) {
         return PopupMenuButton<ThemeMode>(
           icon: const Icon(Icons.palette),
           tooltip: 'Theme Settings',
           onSelected: (ThemeMode mode) {
-            final bloc = context.read<ThemeBloc>();
             switch (mode) {
               case ThemeMode.light:
-                bloc.add(const ThemeLightRequested());
+                themeService.setLight();
                 break;
               case ThemeMode.dark:
-                bloc.add(const ThemeDarkRequested());
+                themeService.setDark();
                 break;
               case ThemeMode.system:
-                bloc.add(const ThemeSystemRequested());
+                themeService.setSystem();
                 break;
             }
           },
@@ -37,13 +34,13 @@ class ThemeSelector extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.light_mode,
-                    color: state.themeMode == ThemeMode.light
+                    color: themeService.themeMode == ThemeMode.light
                         ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
                   const SizedBox(width: 8),
                   const Text('Light'),
-                  if (state.themeMode == ThemeMode.light) ...[
+                  if (themeService.themeMode == ThemeMode.light) ...[
                     const Spacer(),
                     Icon(
                       Icons.check,
@@ -59,13 +56,13 @@ class ThemeSelector extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.dark_mode,
-                    color: state.themeMode == ThemeMode.dark
+                    color: themeService.themeMode == ThemeMode.dark
                         ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
                   const SizedBox(width: 8),
                   const Text('Dark'),
-                  if (state.themeMode == ThemeMode.dark) ...[
+                  if (themeService.themeMode == ThemeMode.dark) ...[
                     const Spacer(),
                     Icon(
                       Icons.check,
@@ -81,13 +78,13 @@ class ThemeSelector extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.brightness_auto,
-                    color: state.themeMode == ThemeMode.system
+                    color: themeService.themeMode == ThemeMode.system
                         ? Theme.of(context).colorScheme.primary
                         : null,
                   ),
                   const SizedBox(width: 8),
                   const Text('System'),
-                  if (state.themeMode == ThemeMode.system) ...[
+                  if (themeService.themeMode == ThemeMode.system) ...[
                     const Spacer(),
                     Icon(
                       Icons.check,

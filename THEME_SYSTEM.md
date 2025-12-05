@@ -15,44 +15,39 @@ The app includes a professional theme management system that supports:
 lib/
 ├── core/
 │   └── theme/
-│       └── app_theme.dart          # Theme configuration (Light/Dark)
+│       ├── app_theme.dart          # Theme configuration (Light/Dark)
+│       └── theme_service.dart       # Simple theme management (ChangeNotifier)
 │
 └── features/
     └── theme/
         └── presentation/
-            ├── bloc/
-            │   ├── theme_bloc.dart            # State management
-            │   ├── theme_event.dart            # Events
-            │   └── theme_state.dart           # States
             └── widgets/
                 ├── theme_toggle_button.dart    # Quick toggle
                 └── theme_selector.dart         # Full menu
 ```
 
-## 🏗️ Architecture (Simplified)
+## 🏗️ Architecture (Ultra Simple)
 
 **Simple and Professional Approach:**
-- **ThemeBloc** - Manages theme state and storage directly
-- Uses `SecureStorageService` directly (no repository layer needed)
-- Clean and simple - perfect for a feature like theme management
+- **ThemeService** - Simple ChangeNotifier (no BLoC needed!)
+- Uses `SecureStorageService` directly
+- Provider for dependency injection
+- Clean and minimal - perfect for simple state like theme
 
 ### Components
 
-- **ThemeBloc** - State management + storage
+- **ThemeService** - Simple state management
+  - Extends `ChangeNotifier` (built-in Flutter)
   - Handles all theme operations
   - Saves/loads from SecureStorageService directly
   - Converts ThemeMode to/from string
+  - Methods: `toggleTheme()`, `setLight()`, `setDark()`, `setSystem()`
 
-- **Theme Events**:
-  - `ThemeToggled` - Toggle between light/dark
-  - `ThemeLightRequested` - Set to light
-  - `ThemeDarkRequested` - Set to dark
-  - `ThemeSystemRequested` - Set to system
-  - `ThemeLoadRequested` - Load saved preference
-
-- **Theme States**:
-  - `ThemeInitial` - Default state
-  - `ThemeLoaded` - Theme mode loaded
+**Why ChangeNotifier instead of BLoC?**
+- Theme is simple state (just one value: ThemeMode)
+- No complex business logic
+- No need for events/states pattern
+- ChangeNotifier is perfect for simple reactive state
 
 ## 🎯 How It Works
 
@@ -116,16 +111,16 @@ actions: [
 ### Accessing Theme in Code
 ```dart
 // Get current theme mode
-final themeBloc = context.read<ThemeBloc>();
-final themeMode = themeBloc.state.themeMode;
+final themeService = context.read<ThemeService>();
+final themeMode = themeService.themeMode;
 
 // Toggle theme
-context.read<ThemeBloc>().add(const ThemeToggled());
+context.read<ThemeService>().toggleTheme();
 
 // Set specific theme
-context.read<ThemeBloc>().add(const ThemeLightRequested());
-context.read<ThemeBloc>().add(const ThemeDarkRequested());
-context.read<ThemeBloc>().add(const ThemeSystemRequested());
+context.read<ThemeService>().setLight();
+context.read<ThemeService>().setDark();
+context.read<ThemeService>().setSystem();
 ```
 
 ## 📱 UI Components
@@ -174,12 +169,15 @@ static const Color _lightBackground = Color(0xFFF0F0F0); // Your color
 ## 🎓 Learning Points
 
 1. **Simple & Professional** - No over-engineering for simple features
-2. **BLoC Pattern** - State management for theme
-3. **Direct Storage** - Uses SecureStorageService directly (no repository needed)
+2. **ChangeNotifier** - Perfect for simple state (no BLoC needed!)
+3. **Direct Storage** - Uses SecureStorageService directly
 4. **Material Design 3** - Modern, beautiful themes
 5. **Reusable Widgets** - Theme toggle and selector
 
-**Note:** For simple features like theme management, you don't need full Clean Architecture. Keep it simple and professional!
+**Key Takeaway:** 
+- **BLoC** = For complex state with business logic (like Auth)
+- **ChangeNotifier** = For simple state (like Theme)
+- Don't use BLoC for everything - choose the right tool!
 
 ## 📚 Related Files
 
@@ -192,10 +190,14 @@ static const Color _lightBackground = Color(0xFFF0F0F0); // Your color
 
 The theme system is:
 - ✅ Professional and well-structured
-- ✅ Simple approach (no unnecessary layers)
+- ✅ Ultra simple (ChangeNotifier, no BLoC)
 - ✅ Easy to use and customize
 - ✅ Persists user preference
 - ✅ Supports Light/Dark/System modes
 
-**Key Takeaway:** For simple features like theme management, keep it simple! No need for full Clean Architecture - just use BLoC + direct storage. Clean and professional! 🎨
+**Key Takeaway:** 
+- **Don't use BLoC for everything!**
+- For simple state like theme → Use **ChangeNotifier**
+- For complex state like auth → Use **BLoC**
+- Choose the right tool for the job! 🎨
 

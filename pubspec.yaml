@@ -38,6 +38,7 @@ dependencies:
   # State management
   bloc: ^8.1.4
   flutter_bloc: ^8.1.4
+  provider: ^6.1.1
   
   # Value equality
   equatable: ^2.0.5

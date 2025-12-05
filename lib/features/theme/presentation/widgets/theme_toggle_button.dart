@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../bloc/theme_bloc.dart';
-import '../bloc/theme_event.dart';
-import '../bloc/theme_state.dart';
+import 'package:provider/provider.dart';
+import '../../../../core/theme/theme_service.dart';
 
 /// Theme Toggle Button Widget
 /// Provides a button to toggle between light and dark themes
@@ -12,17 +10,15 @@ class ThemeToggleButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, state) {
-        final isDark = state.themeMode == ThemeMode.dark;
+    return Consumer<ThemeService>(
+      builder: (context, themeService, child) {
+        final isDark = themeService.themeMode == ThemeMode.dark;
         
         return IconButton(
           icon: Icon(
             isDark ? Icons.light_mode : Icons.dark_mode,
           ),
-          onPressed: () {
-            context.read<ThemeBloc>().add(const ThemeToggled());
-          },
+          onPressed: () => themeService.toggleTheme(),
           tooltip: isDark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
         );
       },
