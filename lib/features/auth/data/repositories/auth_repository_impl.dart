@@ -4,6 +4,8 @@ import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/utils/logger.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
+import '../models/login_response_dto.dart';
+import '../mappers/user_mapper.dart';
 
 /// Auth Repository Implementation
 /// Implements the AuthRepository interface
@@ -33,21 +35,27 @@ class AuthRepositoryImpl implements AuthRepository {
         },
       );
 
-      // Parse user data from response
-      final userData = response['data'] as Map<String, dynamic>? ??
-          response['user'] as Map<String, dynamic>? ??
-          response;
+      // Parse response using DTO (Data Transfer Object)
+      final loginResponseDto = LoginResponseDto.fromJson(response);
 
-      final user = User.fromJson(userData);
-
-      // Save token if present in response
-      final token = response['token'] as String? ?? response['access_token'] as String?;
-      if (token != null) {
-        await _secureStorage.saveToken(token);
-        Logger.info('Token saved successfully');
+      // Validate response
+      if (loginResponseDto.data == null) {
+        throw AuthFailure(
+          loginResponseDto.message ?? 'Login failed: No user data received',
+        );
       }
 
-      // Save user data
+      // Convert DTO to Domain Entity using mapper
+      final user = UserMapper.toEntity(loginResponseDto.data!);
+
+      // Save access token if present
+      final token = loginResponseDto.data!.accessToken;
+      if (token != null && token.isNotEmpty) {
+        await _secureStorage.saveToken(token);
+        Logger.info('Access token saved successfully');
+      }
+
+      // Save user data to secure storage
       await _secureStorage.saveUserData(user.toJson());
       Logger.info('User data saved successfully');
 

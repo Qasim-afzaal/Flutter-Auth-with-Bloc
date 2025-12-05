@@ -98,11 +98,17 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        _buildInfoRow('User ID', user.id),
-                        _buildInfoRow('Name', user.name),
-                        _buildInfoRow('Email', user.email),
-                        if (user.avatar != null)
-                          _buildInfoRow('Avatar', user.avatar!),
+                      _buildInfoRow('User ID', user.id),
+                      _buildInfoRow('Name', user.name),
+                      _buildInfoRow('Email', user.email),
+                      if (user.authProvider != null)
+                        _buildInfoRow('Auth Provider', user.authProvider!),
+                      if (user.gender != null)
+                        _buildInfoRow('Gender', user.gender!),
+                      if (user.age != null)
+                        _buildInfoRow('Age', user.age!),
+                      if (user.avatar != null)
+                        _buildInfoRow('Profile Image', user.avatar!),
                       ],
                     ),
                   ),
