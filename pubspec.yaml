@@ -47,6 +47,12 @@ dependencies:
   
   # Dependency injection
   get_it: ^7.6.7
+  
+  # Routing
+  go_router: ^14.2.0
+  
+  # Secure storage
+  flutter_secure_storage: ^9.2.2
 
 dev_dependencies:
   flutter_test:

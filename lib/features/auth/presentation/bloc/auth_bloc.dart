@@ -1,29 +1,34 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/storage/secure_storage_service.dart';
+import '../../../../core/utils/logger.dart';
+import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import 'auth_event.dart';
 import 'auth_bloc_state.dart';
 
 /// Authentication BLoC
-/// Manages authentication state and handles login, registration, logout, and auth check events
+/// Manages authentication state and handles login events
+/// Uses secure storage to check if user is already logged in
 /// 
 /// Events handled:
 /// - LoginRequested: Attempts to authenticate user with email and password
-/// - RegisterRequested: Creates a new user account
-/// - LogoutRequested: Signs out the current user
-/// - AuthCheckRequested: Checks if user is currently authenticated
+/// - LogoutRequested: Signs out the current user and clears secure storage
+/// - AuthCheckRequested: Checks if user is currently authenticated using secure storage
 class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
   final AuthRepository _authRepository;
-  
-  AuthBloc({required AuthRepository authRepository})
-      : _authRepository = authRepository,
+  final SecureStorageService _secureStorage;
+
+  AuthBloc({
+    required AuthRepository authRepository,
+    required SecureStorageService secureStorage,
+  })  : _authRepository = authRepository,
+        _secureStorage = secureStorage,
         super(AuthInitial()) {
-    
     on<LoginRequested>(_onLoginRequested);
-    on<RegisterRequested>(_onRegisterRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
   }
-  
+
   /// Handles login request event
   /// Emits loading state, then attempts to authenticate user
   /// On success: emits AuthAuthenticated state
@@ -33,71 +38,79 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
     Emitter<AuthBlocState> emit,
   ) async {
     emit(AuthLoading());
-    
+
     try {
+      Logger.info('Login requested for email: ${event.email}');
       final user = await _authRepository.login(event.email, event.password);
+      Logger.info('Login successful for user: ${user.email}');
       emit(AuthAuthenticated(user));
-    } catch (e) {
+    } on Exception catch (e) {
+      Logger.error('Login failed', e);
       emit(AuthError(e.toString()));
+    } catch (e) {
+      Logger.error('Unexpected error during login', e);
+      emit(AuthError('Login failed: $e'));
     }
   }
-  
-  /// Handles registration request event
-  /// Emits loading state, then attempts to create new user account
-  /// On success: emits AuthAuthenticated state with new user
-  /// On failure: emits AuthError state with error message
-  Future<void> _onRegisterRequested(
-    RegisterRequested event,
-    Emitter<AuthBlocState> emit,
-  ) async {
-    emit(AuthLoading());
-    
-    try {
-      final user = await _authRepository.register(
-        event.email,
-        event.password,
-        event.name,
-      );
-      emit(AuthAuthenticated(user));
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
-  }
-  
+
   /// Handles logout request event
-  /// Emits loading state, then signs out current user
-  /// On success: emits AuthUnauthenticated state
-  /// On failure: emits AuthError state with error message
+  /// Clears secure storage and emits unauthenticated state
   Future<void> _onLogoutRequested(
     LogoutRequested event,
     Emitter<AuthBlocState> emit,
   ) async {
     emit(AuthLoading());
-    
+
     try {
-      await _authRepository.logout();
+      Logger.info('Logout requested');
+      await _secureStorage.clearAll();
+      Logger.info('Secure storage cleared');
       emit(AuthUnauthenticated());
     } catch (e) {
-      emit(AuthError(e.toString()));
+      Logger.error('Logout failed', e);
+      emit(AuthError('Logout failed: $e'));
     }
   }
-  
+
   /// Handles auth check request event
-  /// Checks if user is currently authenticated without showing loading state
-  /// If user exists: emits AuthAuthenticated state
-  /// If no user: emits AuthUnauthenticated state
+  /// Checks secure storage to see if user is already logged in
+  /// If user data exists: emits AuthAuthenticated state
+  /// If no user data: emits AuthUnauthenticated state
   Future<void> _onAuthCheckRequested(
     AuthCheckRequested event,
     Emitter<AuthBlocState> emit,
   ) async {
     try {
-      final user = await _authRepository.getCurrentUser();
-      if (user != null) {
-        emit(AuthAuthenticated(user));
+      Logger.info('Checking authentication status');
+      final isLoggedIn = await _secureStorage.isLoggedIn();
+
+      if (isLoggedIn) {
+        final userData = await _secureStorage.getUserData();
+        if (userData != null && userData.isNotEmpty) {
+          // Try to reconstruct user from stored data
+          try {
+            final user = User.fromJson(userData);
+            if (user.email.isNotEmpty && user.id.isNotEmpty) {
+              Logger.info('User found in secure storage: ${user.email}');
+              emit(AuthAuthenticated(user));
+            } else {
+              Logger.info('Invalid user data in secure storage');
+              emit(AuthUnauthenticated());
+            }
+          } catch (e) {
+            Logger.error('Failed to parse user data from storage', e);
+            emit(AuthUnauthenticated());
+          }
+        } else {
+          Logger.info('No user data found in secure storage');
+          emit(AuthUnauthenticated());
+        }
       } else {
+        Logger.info('User is not logged in');
         emit(AuthUnauthenticated());
       }
     } catch (e) {
+      Logger.error('Error checking authentication status', e);
       emit(AuthUnauthenticated());
     }
   }

@@ -1,34 +1,52 @@
-import '../core/network/api_client.dart';
+import 'package:get_it/get_it.dart';
+import '../core/network/api_service.dart';
+import '../core/storage/secure_storage_service.dart';
 import '../features/auth/data/repositories/auth_repository_impl.dart';
 import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
-import 'package:get_it/get_it.dart';
 
 /// Service locator instance for dependency injection
 /// Use this to access registered dependencies throughout the app
+/// Follows Dependency Inversion Principle (SOLID)
 final sl = GetIt.instance;
 
 /// Initializes all dependencies for the application
 /// This should be called before running the app in main.dart
 /// 
-/// Registers:
-/// - External dependencies (API clients, etc.)
-/// - Repositories (data layer)
-/// - BLoCs (presentation layer)
+/// Registers dependencies in order:
+/// 1. External dependencies (API service, secure storage)
+/// 2. Repository layer (data layer implementations)
+/// 3. BLoC layer (presentation layer)
+/// 
+/// Follows Clean Architecture principles
 Future<void> init() async {
   // External dependencies
   // These are singletons that persist for the app lifetime
-  sl.registerLazySingleton(() => ApiClient());
-  
+  sl.registerLazySingleton<ApiService>(
+    () => ApiService(),
+  );
+
+  sl.registerLazySingleton<SecureStorageService>(
+    () => SecureStorageService(),
+  );
+
   // Repository layer
   // Repositories implement domain interfaces and handle data operations
+  // Follows Interface Segregation Principle (SOLID)
   sl.registerLazySingleton<AuthRepository>(
-    () => AuthRepositoryImpl(apiClient: sl()),
+    () => AuthRepositoryImpl(
+      apiService: sl(),
+      secureStorage: sl(),
+    ),
   );
-  
+
   // BLoC layer
   // BLoCs are registered as factories to create new instances per widget tree
+  // This allows multiple instances if needed (e.g., different screens)
   sl.registerFactory(
-    () => AuthBloc(authRepository: sl()),
+    () => AuthBloc(
+      authRepository: sl(),
+      secureStorage: sl(),
+    ),
   );
 }

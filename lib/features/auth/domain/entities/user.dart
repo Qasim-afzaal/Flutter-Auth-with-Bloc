@@ -16,12 +16,31 @@ class User extends Equatable {
   });
   
   factory User.fromJson(Map<String, dynamic> json) {
+    DateTime parseCreatedAt(dynamic dateValue) {
+      if (dateValue == null) {
+        return DateTime.now();
+      }
+      if (dateValue is String) {
+        try {
+          return DateTime.parse(dateValue);
+        } catch (_) {
+          return DateTime.now();
+        }
+      }
+      if (dateValue is DateTime) {
+        return dateValue;
+      }
+      return DateTime.now();
+    }
+
     return User(
-      id: json['id'] as String,
-      email: json['email'] as String,
-      name: json['name'] as String,
-      avatar: json['avatar'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
+      id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
+      email: json['email']?.toString() ?? '',
+      name: json['name']?.toString() ?? json['username']?.toString() ?? '',
+      avatar: json['avatar']?.toString(),
+      createdAt: parseCreatedAt(
+        json['created_at'] ?? json['createdAt'] ?? json['created'],
+      ),
     );
   }
   

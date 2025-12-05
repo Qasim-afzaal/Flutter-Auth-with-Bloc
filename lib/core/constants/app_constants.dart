@@ -1,7 +1,7 @@
 class AppConstants {
   // API Configuration
-  static const String baseUrl = 'https://api.example.com';
-  static const String apiVersion = 'v1';
+  static const String baseUrl = 'http://3.92.114.189:3005/api';
+  static const String apiVersion = '';
   
   // Storage Keys
   static const String tokenKey = 'auth_token';
