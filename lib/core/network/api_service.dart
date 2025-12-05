@@ -5,8 +5,18 @@ import '../constants/app_constants.dart';
 import '../errors/failures.dart';
 import '../utils/logger.dart';
 
+/// HTTP Method enum for type-safe method specification
+enum HttpMethod {
+  get,
+  post,
+  put,
+  patch,
+  delete,
+}
+
 /// API Service class for making HTTP requests
 /// Implements all HTTP methods (GET, POST, PUT, DELETE, PATCH)
+/// Uses a generic request method to reduce code duplication
 /// Handles all network errors, timeouts, and response parsing
 /// Follows SOLID principles and Clean Architecture
 class ApiService {
@@ -32,35 +42,11 @@ class ApiService {
     String endpoint, {
     Map<String, String>? headers,
   }) async {
-    try {
-      Logger.info('GET Request: $_baseUrl$endpoint');
-
-      // Ensure endpoint starts with /
-      final normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/$endpoint';
-      final uri = Uri.parse('$_baseUrl$normalizedEndpoint');
-      final requestHeaders = _buildHeaders(headers);
-
-      final response = await _client
-          .get(uri, headers: requestHeaders)
-          .timeout(
-            Duration(milliseconds: AppConstants.connectionTimeout),
-            onTimeout: () {
-              throw TimeoutException('Request timeout');
-            },
-          );
-
-      Logger.info('GET Response Status: ${response.statusCode}');
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      Logger.error('GET Request Timeout', e);
-      throw NetworkFailure('Request timeout: ${e.message}');
-    } on http.ClientException catch (e) {
-      Logger.error('GET Network Error', e);
-      throw NetworkFailure('Network error: ${e.message}');
-    } catch (e) {
-      Logger.error('GET Unexpected Error', e);
-      throw NetworkFailure('Unexpected error: $e');
-    }
+    return _makeRequest(
+      method: HttpMethod.get,
+      endpoint: endpoint,
+      headers: headers,
+    );
   }
 
   /// Performs a POST request to the specified endpoint with JSON body
@@ -78,40 +64,12 @@ class ApiService {
     Map<String, dynamic> body, {
     Map<String, String>? headers,
   }) async {
-    try {
-      Logger.info('POST Request: $_baseUrl$endpoint');
-      Logger.debug('POST Body: ${json.encode(body)}');
-
-      // Ensure endpoint starts with /
-      final normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/$endpoint';
-      final uri = Uri.parse('$_baseUrl$normalizedEndpoint');
-      final requestHeaders = _buildHeaders(headers);
-
-      final response = await _client
-          .post(
-            uri,
-            headers: requestHeaders,
-            body: json.encode(body),
-          )
-          .timeout(
-            Duration(milliseconds: AppConstants.connectionTimeout),
-            onTimeout: () {
-              throw TimeoutException('Request timeout');
-            },
-          );
-
-      Logger.info('POST Response Status: ${response.statusCode}');
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      Logger.error('POST Request Timeout', e);
-      throw NetworkFailure('Request timeout: ${e.message}');
-    } on http.ClientException catch (e) {
-      Logger.error('POST Network Error', e);
-      throw NetworkFailure('Network error: ${e.message}');
-    } catch (e) {
-      Logger.error('POST Unexpected Error', e);
-      throw NetworkFailure('Unexpected error: $e');
-    }
+    return _makeRequest(
+      method: HttpMethod.post,
+      endpoint: endpoint,
+      body: body,
+      headers: headers,
+    );
   }
 
   /// Performs a PUT request to the specified endpoint with JSON body
@@ -126,39 +84,12 @@ class ApiService {
     Map<String, dynamic> body, {
     Map<String, String>? headers,
   }) async {
-    try {
-      Logger.info('PUT Request: $_baseUrl$endpoint');
-
-      // Ensure endpoint starts with /
-      final normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/$endpoint';
-      final uri = Uri.parse('$_baseUrl$normalizedEndpoint');
-      final requestHeaders = _buildHeaders(headers);
-
-      final response = await _client
-          .put(
-            uri,
-            headers: requestHeaders,
-            body: json.encode(body),
-          )
-          .timeout(
-            Duration(milliseconds: AppConstants.connectionTimeout),
-            onTimeout: () {
-              throw TimeoutException('Request timeout');
-            },
-          );
-
-      Logger.info('PUT Response Status: ${response.statusCode}');
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      Logger.error('PUT Request Timeout', e);
-      throw NetworkFailure('Request timeout');
-    } on http.ClientException catch (e) {
-      Logger.error('PUT Network Error', e);
-      throw NetworkFailure('Network error: ${e.message}');
-    } catch (e) {
-      Logger.error('PUT Unexpected Error', e);
-      throw NetworkFailure('Unexpected error: $e');
-    }
+    return _makeRequest(
+      method: HttpMethod.put,
+      endpoint: endpoint,
+      body: body,
+      headers: headers,
+    );
   }
 
   /// Performs a PATCH request to the specified endpoint with JSON body
@@ -173,39 +104,12 @@ class ApiService {
     Map<String, dynamic> body, {
     Map<String, String>? headers,
   }) async {
-    try {
-      Logger.info('PATCH Request: $_baseUrl$endpoint');
-
-      // Ensure endpoint starts with /
-      final normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/$endpoint';
-      final uri = Uri.parse('$_baseUrl$normalizedEndpoint');
-      final requestHeaders = _buildHeaders(headers);
-
-      final response = await _client
-          .patch(
-            uri,
-            headers: requestHeaders,
-            body: json.encode(body),
-          )
-          .timeout(
-            Duration(milliseconds: AppConstants.connectionTimeout),
-            onTimeout: () {
-              throw TimeoutException('Request timeout');
-            },
-          );
-
-      Logger.info('PATCH Response Status: ${response.statusCode}');
-      return _handleResponse(response);
-    } on TimeoutException catch (e) {
-      Logger.error('PATCH Request Timeout', e);
-      throw NetworkFailure('Request timeout');
-    } on http.ClientException catch (e) {
-      Logger.error('PATCH Network Error', e);
-      throw NetworkFailure('Network error: ${e.message}');
-    } catch (e) {
-      Logger.error('PATCH Unexpected Error', e);
-      throw NetworkFailure('Unexpected error: $e');
-    }
+    return _makeRequest(
+      method: HttpMethod.patch,
+      endpoint: endpoint,
+      body: body,
+      headers: headers,
+    );
   }
 
   /// Performs a DELETE request to the specified endpoint
@@ -218,34 +122,105 @@ class ApiService {
     String endpoint, {
     Map<String, String>? headers,
   }) async {
+    return _makeRequest(
+      method: HttpMethod.delete,
+      endpoint: endpoint,
+      headers: headers,
+    );
+  }
+
+  /// Generic request method that handles all HTTP methods
+  /// This method centralizes all common logic (error handling, logging, etc.)
+  /// 
+  /// [method] - The HTTP method to use (GET, POST, PUT, PATCH, DELETE)
+  /// [endpoint] - The API endpoint
+  /// [body] - Optional request body (required for POST, PUT, PATCH)
+  /// [headers] - Optional custom headers
+  /// 
+  /// Returns [Map<String, dynamic>] containing the response data
+  /// Throws [NetworkFailure] if network error occurs
+  /// Throws [ServerFailure] if server returns error status code
+  /// Throws [AuthFailure] if response is 401 Unauthorized
+  Future<Map<String, dynamic>> _makeRequest({
+    required HttpMethod method,
+    required String endpoint,
+    Map<String, dynamic>? body,
+    Map<String, String>? headers,
+  }) async {
+    final methodName = method.name.toUpperCase();
+    
     try {
-      Logger.info('DELETE Request: $_baseUrl$endpoint');
+      Logger.info('$methodName Request: $_baseUrl$endpoint');
+      
+      if (body != null) {
+        Logger.debug('$methodName Body: ${json.encode(body)}');
+      }
 
       // Ensure endpoint starts with /
       final normalizedEndpoint = endpoint.startsWith('/') ? endpoint : '/$endpoint';
       final uri = Uri.parse('$_baseUrl$normalizedEndpoint');
       final requestHeaders = _buildHeaders(headers);
 
-      final response = await _client
-          .delete(uri, headers: requestHeaders)
-          .timeout(
-            Duration(milliseconds: AppConstants.connectionTimeout),
-            onTimeout: () {
-              throw TimeoutException('Request timeout');
-            },
-          );
+      // Execute the appropriate HTTP method
+      final response = await _executeRequest(
+        method: method,
+        uri: uri,
+        headers: requestHeaders,
+        body: body,
+      ).timeout(
+        Duration(milliseconds: AppConstants.connectionTimeout),
+        onTimeout: () {
+          throw TimeoutException('Request timeout');
+        },
+      );
 
-      Logger.info('DELETE Response Status: ${response.statusCode}');
+      Logger.info('$methodName Response Status: ${response.statusCode}');
       return _handleResponse(response);
     } on TimeoutException catch (e) {
-      Logger.error('DELETE Request Timeout', e);
-      throw NetworkFailure('Request timeout');
+      Logger.error('$methodName Request Timeout', e);
+      throw NetworkFailure('Request timeout: ${e.message}');
     } on http.ClientException catch (e) {
-      Logger.error('DELETE Network Error', e);
+      Logger.error('$methodName Network Error', e);
       throw NetworkFailure('Network error: ${e.message}');
+    } on AuthFailure {
+      rethrow; // Re-throw auth failures as-is
+    } on ServerFailure {
+      rethrow; // Re-throw server failures as-is
+    } on NetworkFailure {
+      rethrow; // Re-throw network failures as-is
     } catch (e) {
-      Logger.error('DELETE Unexpected Error', e);
+      Logger.error('$methodName Unexpected Error', e);
       throw NetworkFailure('Unexpected error: $e');
+    }
+  }
+
+  /// Executes the HTTP request based on the method type
+  /// 
+  /// [method] - The HTTP method to execute
+  /// [uri] - The complete URI for the request
+  /// [headers] - Request headers
+  /// [body] - Optional request body
+  /// 
+  /// Returns [http.Response] from the HTTP client
+  Future<http.Response> _executeRequest({
+    required HttpMethod method,
+    required Uri uri,
+    required Map<String, String> headers,
+    Map<String, dynamic>? body,
+  }) async {
+    final bodyString = body != null ? json.encode(body) : null;
+
+    switch (method) {
+      case HttpMethod.get:
+        return await _client.get(uri, headers: headers);
+      case HttpMethod.post:
+        return await _client.post(uri, headers: headers, body: bodyString);
+      case HttpMethod.put:
+        return await _client.put(uri, headers: headers, body: bodyString);
+      case HttpMethod.patch:
+        return await _client.patch(uri, headers: headers, body: bodyString);
+      case HttpMethod.delete:
+        return await _client.delete(uri, headers: headers);
     }
   }
 
@@ -313,4 +288,3 @@ class ApiService {
     _client.close();
   }
 }
-
