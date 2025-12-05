@@ -13,19 +13,6 @@ class AppConstants {
   static int get connectionTimeout => AppConfig.connectionTimeout;
   static int get receiveTimeout => AppConfig.receiveTimeout;
   
-  // Counter Configuration
-  static const int counterMaxValue = 100;
-  static const int counterMinValue = -50;
-  
-  // Counter Step Values
-  static const int incrementStep = 1;
-  static const int decrementStep = 1;
-  static const int doubleMultiplier = 2;
-  static const int halfDivisor = 2;
-  static const int squareExponent = 2;
-  static const int defaultPowerExponent = 2;
-  static const int cubeExponent = 3;
-  
   // UI Configuration
   static const double defaultPadding = 16.0;
   static const double defaultBorderRadius = 8.0;
@@ -57,7 +44,6 @@ class AppConstants {
   static const String errorAuthenticationFailed = 'Authentication failed. Please check your credentials.';
   static const String errorValidationFailed = 'Validation failed. Please check your input.';
   static const String errorUnknown = 'An unknown error occurred. Please try again.';
-  static const String errorCounterLimitReached = 'Counter limit reached. Cannot perform this operation.';
   static const String errorInvalidInput = 'Invalid input provided. Please check your data.';
   
   // Success Messages
