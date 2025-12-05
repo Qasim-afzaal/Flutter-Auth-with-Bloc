@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/storage/secure_storage_service.dart';
 import '../../../../core/utils/logger.dart';
-import '../../domain/repositories/theme_repository.dart';
 import 'theme_event.dart';
 import 'theme_state.dart';
 
@@ -16,11 +16,12 @@ import 'theme_state.dart';
 /// - ThemeSystemRequested: Sets theme to system default
 /// - ThemeLoadRequested: Loads saved theme preference
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  final ThemeRepository _themeRepository;
+  final SecureStorageService _storage;
+  static const String _themeKey = 'theme_mode';
 
   ThemeBloc({
-    required ThemeRepository themeRepository,
-  })  : _themeRepository = themeRepository,
+    required SecureStorageService storage,
+  })  : _storage = storage,
         super(const ThemeInitial()) {
     on<ThemeToggled>(_onThemeToggled);
     on<ThemeLightRequested>(_onThemeLightRequested);
@@ -103,8 +104,8 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ) async {
     try {
       Logger.info('Loading theme preference');
-      final themeMode = await _themeRepository.getThemeMode();
-      final mode = themeMode ?? ThemeMode.system;
+      final themeString = await _storage.getString(_themeKey);
+      final mode = _parseThemeMode(themeString);
       Logger.info('Theme preference loaded: ${mode.name}');
       emit(ThemeLoaded(mode));
     } catch (e) {
@@ -118,8 +119,44 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     Emitter<ThemeState> emit,
     ThemeMode themeMode,
   ) async {
-    await _themeRepository.saveThemeMode(themeMode);
-    emit(ThemeLoaded(themeMode));
+    try {
+      final themeString = _themeModeToString(themeMode);
+      await _storage.saveString(_themeKey, themeString);
+      Logger.info('Theme saved: ${themeMode.name}');
+      emit(ThemeLoaded(themeMode));
+    } catch (e) {
+      Logger.error('Error saving theme', e);
+      emit(ThemeLoaded(themeMode)); // Still emit even if save fails
+    }
+  }
+
+  /// Converts ThemeMode to string
+  String _themeModeToString(ThemeMode themeMode) {
+    switch (themeMode) {
+      case ThemeMode.light:
+        return 'light';
+      case ThemeMode.dark:
+        return 'dark';
+      case ThemeMode.system:
+        return 'system';
+    }
+  }
+
+  /// Parses string to ThemeMode
+  ThemeMode _parseThemeMode(String? themeString) {
+    if (themeString == null || themeString.isEmpty) {
+      return ThemeMode.system;
+    }
+    
+    switch (themeString.toLowerCase()) {
+      case 'light':
+        return ThemeMode.light;
+      case 'dark':
+        return ThemeMode.dark;
+      case 'system':
+      default:
+        return ThemeMode.system;
+    }
   }
 }
 

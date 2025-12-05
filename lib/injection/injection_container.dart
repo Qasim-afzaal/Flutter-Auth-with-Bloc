@@ -4,8 +4,6 @@ import '../core/storage/secure_storage_service.dart';
 import '../features/auth/data/repositories/auth_repository_impl.dart';
 import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/auth/presentation/bloc/auth_bloc.dart';
-import '../features/theme/data/repositories/theme_repository_impl.dart';
-import '../features/theme/domain/repositories/theme_repository.dart';
 import '../features/theme/presentation/bloc/theme_bloc.dart';
 import '../features/theme/presentation/bloc/theme_event.dart';
 
@@ -44,13 +42,6 @@ Future<void> init() async {
     ),
   );
 
-  // Repository layer - Theme
-  sl.registerLazySingleton<ThemeRepository>(
-    () => ThemeRepositoryImpl(
-      secureStorage: sl(),
-    ),
-  );
-
   // BLoC layer
   // BLoCs are registered as factories to create new instances per widget tree
   // This allows multiple instances if needed (e.g., different screens)
@@ -62,9 +53,10 @@ Future<void> init() async {
   );
 
   // Theme BLoC - Singleton to maintain theme state across app
+  // Uses SecureStorageService directly (simpler approach for theme)
   sl.registerLazySingleton(
     () => ThemeBloc(
-      themeRepository: sl(),
+      storage: sl(),
     )..add(ThemeLoadRequested()),
   );
 }
