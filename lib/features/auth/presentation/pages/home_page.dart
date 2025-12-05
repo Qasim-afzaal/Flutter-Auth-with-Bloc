@@ -5,6 +5,8 @@ import '../bloc/auth_bloc.dart';
 import '../bloc/auth_event.dart';
 import '../bloc/auth_bloc_state.dart';
 import '../../domain/entities/user.dart';
+import '../../../theme/presentation/widgets/theme_toggle_button.dart';
+import '../../../theme/presentation/widgets/theme_selector.dart';
 
 /// Home Page
 /// Displayed after successful authentication
@@ -47,6 +49,11 @@ class HomePage extends StatelessWidget {
           title: const Text('Home'),
           centerTitle: true,
           actions: [
+            // Theme selector (Light/Dark/System)
+            const ThemeSelector(),
+            // Theme toggle button (quick toggle)
+            const ThemeToggleButton(),
+            // Logout button
             IconButton(
               icon: const Icon(Icons.logout),
               onPressed: () {

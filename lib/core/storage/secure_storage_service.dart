@@ -13,6 +13,7 @@ class SecureStorageService {
   static const String _keyToken = 'auth_token';
   static const String _keyUserData = 'user_data';
   static const String _keyIsLoggedIn = 'is_logged_in';
+  static const String _keyThemeMode = 'theme_mode';
 
   SecureStorageService({FlutterSecureStorage? storage})
       : _storage = storage ?? const FlutterSecureStorage(
@@ -128,6 +129,39 @@ class SecureStorageService {
     } catch (e) {
       Logger.error('Failed to delete key: $key', e);
       return false;
+    }
+  }
+
+  /// Saves a string value with a custom key
+  /// 
+  /// [key] - The storage key
+  /// [value] - The value to save
+  /// Returns true if successful, false otherwise
+  Future<bool> saveString(String key, String value) async {
+    try {
+      await _storage.write(key: key, value: value);
+      Logger.info('String saved for key: $key');
+      return true;
+    } catch (e) {
+      Logger.error('Failed to save string for key: $key', e);
+      return false;
+    }
+  }
+
+  /// Retrieves a string value by key
+  /// 
+  /// [key] - The storage key
+  /// Returns the value if exists, null otherwise
+  Future<String?> getString(String key) async {
+    try {
+      final value = await _storage.read(key: key);
+      if (value != null) {
+        Logger.info('String retrieved for key: $key');
+      }
+      return value;
+    } catch (e) {
+      Logger.error('Failed to retrieve string for key: $key', e);
+      return null;
     }
   }
 }
