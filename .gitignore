@@ -52,6 +52,5 @@ app.*.map.json
 config.json
 secrets.json
 
-# API keys and sensitive data
-**/config/app_config.dart
-!**/config/app_config.dart.example
+# Note: app_config.dart is safe to commit as it uses environment variables
+# Only .env files with actual values should be gitignored
