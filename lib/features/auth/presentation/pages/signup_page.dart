@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import '../bloc/auth_bloc.dart';
-import '../bloc/auth_event.dart';
-import '../bloc/auth_bloc_state.dart';
 import '../../../../core/utils/validation_utils.dart';
 
 /// Signup Page
@@ -36,34 +32,42 @@ class _SignupPageState extends State<SignupPage> {
 
   void _handleSignup() {
     if (_formKey.currentState!.validate()) {
-      context.read<AuthBloc>().add(
-            RegisterRequested(
-              email: _emailController.text.trim(),
-              password: _passwordController.text,
-              name: _nameController.text.trim(),
-            ),
-          );
+      // TODO: Add BLoC event dispatch here
+      // Example:
+      // context.read<AuthBloc>().add(
+      //   RegisterRequested(
+      //     email: _emailController.text.trim(),
+      //     password: _passwordController.text,
+      //     name: _nameController.text.trim(),
+      //   ),
+      // );
+      
+      // For now, just show a message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Add BLoC integration here!'),
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthBloc, AuthBlocState>(
-      listener: (context, state) {
-        if (state is AuthAuthenticated) {
-          // Navigate to home page on successful signup
-          context.go('/home');
-        } else if (state is AuthError) {
-          // Show error message
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: Colors.red,
-            ),
-          );
-        }
-      },
-      child: Scaffold(
+    // TODO: Add BlocListener here to listen for state changes
+    // Example:
+    // return BlocListener<AuthBloc, AuthBlocState>(
+    //   listener: (context, state) {
+    //     if (state is AuthAuthenticated) {
+    //       context.go('/home');
+    //     } else if (state is AuthError) {
+    //       ScaffoldMessenger.of(context).showSnackBar(
+    //         SnackBar(content: Text(state.message)),
+    //       );
+    //     }
+    //   },
+    //   child: ...
+    
+    return Scaffold(
         appBar: AppBar(
           title: const Text('Sign Up'),
           centerTitle: true,
@@ -203,28 +207,26 @@ class _SignupPageState extends State<SignupPage> {
                     },
                   ),
                   const SizedBox(height: 24),
-                  BlocBuilder<AuthBloc, AuthBlocState>(
-                    builder: (context, state) {
-                      final isLoading = state is AuthLoading;
-                      return ElevatedButton(
-                        onPressed: isLoading ? null : _handleSignup,
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: const Size(double.infinity, 50),
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                        ),
-                        child: isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor:
-                                      AlwaysStoppedAnimation<Color>(Colors.white),
-                                ),
-                              )
-                            : const Text('Sign Up'),
-                      );
-                    },
+                  // TODO: Add BlocBuilder here to show loading state
+                  // Example:
+                  // BlocBuilder<AuthBloc, AuthBlocState>(
+                  //   builder: (context, state) {
+                  //     final isLoading = state is AuthLoading;
+                  //     return ElevatedButton(
+                  //       onPressed: isLoading ? null : _handleSignup,
+                  //       child: isLoading
+                  //           ? CircularProgressIndicator()
+                  //           : Text('Sign Up'),
+                  //     );
+                  //   },
+                  // ),
+                  ElevatedButton(
+                    onPressed: _handleSignup,
+                    style: ElevatedButton.styleFrom(
+                      minimumSize: const Size(double.infinity, 50),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                    child: const Text('Sign Up'),
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -244,8 +246,9 @@ class _SignupPageState extends State<SignupPage> {
             ),
           ),
         ),
-      ),
-    );
+      );
+    // TODO: Close BlocListener if you add it above
+    // );
   }
 }
 
