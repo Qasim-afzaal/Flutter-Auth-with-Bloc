@@ -27,6 +27,35 @@ class AuthBloc extends Bloc<AuthEvent, AuthBlocState> {
     on<LoginRequested>(_onLoginRequested);
     on<LogoutRequested>(_onLogoutRequested);
     on<AuthCheckRequested>(_onAuthCheckRequested);
+    on<RegisterRequested>(_onRegisterRequested);
+  }
+
+  /// Handles register request event
+  /// Emits loading state, then attempts to register user
+  /// On success: emits AuthAuthenticated state
+  /// On failure: emits AuthError state with error message
+  Future<void> _onRegisterRequested(
+    RegisterRequested event,
+    Emitter<AuthBlocState> emit,
+  ) async {
+    emit(AuthLoading());
+
+    try {
+      Logger.info('Register requested for email: ${event.email}');
+      final user = await _authRepository.userRegister(
+        event.email,
+        event.password,
+        event.name,
+      );
+      Logger.info('Register successful for user: ${user.email}');
+      emit(AuthAuthenticated(user));
+    } on Exception catch (e) {
+      Logger.error('Register failed', e);
+      emit(AuthError(e.toString()));
+    } catch (e) {
+      Logger.error('Unexpected error during register', e);
+      emit(AuthError('Register failed: $e'));
+    }
   }
 
   /// Handles login request event

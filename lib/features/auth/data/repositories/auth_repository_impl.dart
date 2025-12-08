@@ -75,4 +75,49 @@ class AuthRepositoryImpl implements AuthRepository {
       throw AuthFailure('Login failed: $e');
     }
   }
+
+  @override
+  Future<User> userRegister(String email, String password, String name) async {
+    try {
+      Logger.info('Attempting register for email: $email');
+      Map<String, dynamic> body = {
+        'email': email,
+        'password': password,
+        'name': name,
+      };
+      final response= await _apiService.post(
+        '/auth/register',
+       body,
+      );
+      Logger.info('Register response: $response');
+      final registerResponseDto = LoginResponseDto.fromJson(response);
+      if (registerResponseDto.data == null) {
+        throw AuthFailure(
+          registerResponseDto.message ?? 'Register failed: No user data received',
+        );
+      } 
+      final user = UserMapper.toEntity(registerResponseDto.data!);
+      final token=registerResponseDto.data!.accessToken;
+      if (token != null && token.isNotEmpty) {
+        await _secureStorage.saveToken(token);
+      }
+      await _secureStorage.saveUserData(user.toJson());
+      Logger.info('Token saved successfully');
+      Logger.info('User data saved successfully');
+      Logger.info('Register successful for user: ${user.email}');
+      return user;
+    } on AuthFailure {
+      Logger.error('Authentication failed');
+      rethrow;
+    } on NetworkFailure catch (e) {
+      Logger.error('Network error during register', e);
+      throw NetworkFailure('Network error: ${e.message}');
+    } on ServerFailure catch (e) {
+      Logger.error('Server error during register', e);
+      throw ServerFailure('Server error: ${e.message}');
+    } catch (e) {
+      Logger.error('Unexpected error during register', e);
+      throw AuthFailure('Register failed: $e');
+    }
+  }
 }
