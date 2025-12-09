@@ -5,7 +5,7 @@ import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/auth/presentation/bloc/auth_bloc_state.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/auth/presentation/pages/signup_page.dart';
-import '../../features/auth/presentation/pages/home_page.dart';
+import '../../features/dashboard/presentation/pages/dashboard_page.dart';
 import '../utils/logger.dart';
 
 /// App Router Configuration
@@ -22,18 +22,18 @@ class AppRouter {
           final isAuthenticated = authBloc.state is AuthAuthenticated;
           final isLoginPage = state.matchedLocation == '/login';
           final isSignupPage = state.matchedLocation == '/signup';
-          final isHomePage = state.matchedLocation == '/home';
+          final isDashboardPage = state.matchedLocation == '/dashboard';
 
           Logger.info('Navigation: ${state.matchedLocation}, Authenticated: $isAuthenticated');
 
-          // If user is authenticated and trying to access login/signup, redirect to home
+          // If user is authenticated and trying to access login/signup, redirect to dashboard
           if (isAuthenticated && (isLoginPage || isSignupPage)) {
-            Logger.info('Redirecting authenticated user to home');
-            return '/home';
+            Logger.info('Redirecting authenticated user to dashboard');
+            return '/dashboard';
           }
 
-          // If user is not authenticated and trying to access home, redirect to login
-          if (!isAuthenticated && isHomePage) {
+          // If user is not authenticated and trying to access dashboard, redirect to login
+          if (!isAuthenticated && isDashboardPage) {
             Logger.info('Redirecting unauthenticated user to login');
             return '/login';
           }
@@ -56,9 +56,9 @@ class AppRouter {
           builder: (context, state) => const SignupPage(),
         ),
         GoRoute(
-          path: '/home',
-          name: 'home',
-          builder: (context, state) => const HomePage(),
+          path: '/dashboard',
+          name: 'dashboard',
+          builder: (context, state) => const DashboardPage(),
         ),
       ],
       errorBuilder: (context, state) => Scaffold(

@@ -51,8 +51,8 @@ class _SignupPageState extends State<SignupPage> {
     return BlocListener<AuthBloc, AuthBlocState>(
       listener: (context, state) {
         if (state is AuthAuthenticated) {
-          // Navigate to home page on successful signup
-          context.go('/home');
+          // Navigate to dashboard on successful signup
+          context.go('/dashboard');
         } else if (state is AuthError) {
           // Show error message
           ScaffoldMessenger.of(context).showSnackBar(
