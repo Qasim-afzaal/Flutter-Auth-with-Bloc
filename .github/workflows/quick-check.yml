@@ -1,0 +1,50 @@
+name: Quick Check
+
+# Lightweight workflow for quick validation
+# Runs faster checks (no full builds)
+# Useful for PRs and frequent commits
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+  push:
+    branches: [ main, develop ]
+
+jobs:
+  quick-validation:
+    name: Quick Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10  # Fail if takes longer than 10 minutes
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+          cache: true  # Cache Flutter SDK for faster runs
+      
+      - name: Install dependencies
+        run: flutter pub get
+      
+      # Quick checks (fast)
+      - name: Analyze code
+        run: flutter analyze
+      
+      - name: Check formatting
+        run: dart format --set-exit-if-changed .
+      
+      # Run tests (can be slow, but important)
+      - name: Run tests
+        run: flutter test
+      
+      # Verify build works (but don't upload)
+      - name: Verify Android build
+        run: flutter build apk --debug
+      
+      - name: Verify Web build
+        run: flutter build web --release
+
