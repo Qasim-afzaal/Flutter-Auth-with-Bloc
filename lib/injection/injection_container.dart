@@ -14,6 +14,10 @@ import '../features/profile/presentation/bloc/profile_bloc.dart';
 import '../features/notification/data/repositories/notification_repository_impl.dart';
 import '../features/notification/domain/repositories/notification_repository.dart';
 import '../features/notification/presentation/bloc/notification_bloc.dart';
+import '../features/dashboard/data/repositories/dashboard_repository_impl.dart';
+import '../features/dashboard/domain/repositories/dashboard_repository.dart';
+import '../features/dashboard/presentation/bloc/dashboard_bloc.dart';
+import '../features/auth/presentation/providers/auth_provider.dart';
 
 /// Service locator instance for dependency injection
 /// Use this to access registered dependencies throughout the app
@@ -83,6 +87,13 @@ Future<void> init() async {
     () => NotificationRepositoryImpl(),
   );
 
+  // Dashboard Repository
+  sl.registerLazySingleton<DashboardRepository>(
+    () => DashboardRepositoryImpl(
+      secureStorage: sl(),
+    ),
+  );
+
   // Home BLoC - Factory to create new instances
   sl.registerFactory(
     () => HomeBloc(
@@ -101,6 +112,22 @@ Future<void> init() async {
   sl.registerFactory(
     () => NotificationBloc(
       notificationRepository: sl(),
+    ),
+  );
+
+  // Dashboard BLoC - Factory to create new instances
+  sl.registerFactory(
+    () => DashboardBloc(
+      dashboardRepository: sl(),
+    ),
+  );
+
+  // Auth Provider - Singleton (shared across app)
+  // Provider uses ChangeNotifier, typically as singleton
+  sl.registerLazySingleton<AuthProvider>(
+    () => AuthProvider(
+      authRepository: sl(),
+      secureStorage: sl(),
     ),
   );
 }
