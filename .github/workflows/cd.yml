@@ -1,0 +1,160 @@
+name: CD Pipeline
+
+# This workflow runs on successful CI and deploys the app
+# CD = Continuous Deployment (automatically deploy after successful build)
+
+on:
+  # Only run on main branch after successful CI
+  push:
+    branches: [ main ]
+    # Only deploy if CI pipeline succeeded
+    # This is handled by workflow_run trigger below
+  
+  # Run after CI pipeline completes successfully
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    types:
+      - completed
+    branches: [ main ]
+
+  # Allow manual deployment
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  # Job 1: Deploy to Staging
+  # Deploys to staging environment for testing
+  deploy-staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event.workflow_run.conclusion == 'success'
+    
+    environment:
+      name: staging
+      url: https://staging.yourapp.com # Replace with your staging URL
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+      
+      - name: Install dependencies
+        run: flutter pub get
+      
+      # Build for staging
+      - name: Build Android APK (Staging)
+        run: flutter build apk --release --dart-define=ENV=staging
+      
+      # Build for staging web
+      - name: Build Web (Staging)
+        run: flutter build web --release --dart-define=ENV=staging
+      
+      # Example: Deploy to Firebase Hosting (web)
+      # - name: Deploy to Firebase Hosting
+      #   uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
+      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+      #     channelId: staging
+      #     projectId: your-project-id
+      
+      # Example: Upload to Google Play (Android) - Internal Testing
+      # - name: Deploy to Google Play (Internal)
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+      #     packageName: com.yourapp.package
+      #     releaseFiles: build/app/outputs/flutter-apk/app-release.apk
+      #     track: internal
+      
+      - name: Deployment Summary
+        run: |
+          echo "✅ Staging deployment completed!"
+          echo "📱 Android APK: build/app/outputs/flutter-apk/app-release.apk"
+          echo "🌐 Web build: build/web"
+
+  # Job 2: Deploy to Production
+  # Deploys to production (usually requires manual approval)
+  deploy-production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    # Only deploy on tags (version releases) or manual trigger
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    
+    environment:
+      name: production
+      url: https://yourapp.com # Replace with your production URL
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0'
+          channel: 'stable'
+      
+      - name: Install dependencies
+        run: flutter pub get
+      
+      # Build for production
+      - name: Build Android APK (Production)
+        run: flutter build apk --release --dart-define=ENV=production
+      
+      # Build Android App Bundle (required for Play Store)
+      - name: Build Android App Bundle
+        run: flutter build appbundle --release --dart-define=ENV=production
+      
+      # Build for production web
+      - name: Build Web (Production)
+        run: flutter build web --release --dart-define=ENV=production
+      
+      # Example: Deploy to Firebase Hosting (production)
+      # - name: Deploy to Firebase Hosting
+      #   uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
+      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+      #     projectId: your-project-id
+      
+      # Example: Upload to Google Play (Production)
+      # - name: Deploy to Google Play (Production)
+      #   uses: r0adkll/upload-google-play@v1
+      #   with:
+      #     serviceAccountJsonPlainText: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT }}
+      #     packageName: com.yourapp.package
+      #     releaseFiles: build/app/outputs/bundle/release/app-release.aab
+      #     track: production
+      
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            build/app/outputs/flutter-apk/app-release.apk
+            build/app/outputs/bundle/release/app-release.aab
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
+      - name: Deployment Summary
+        run: |
+          echo "🎉 Production deployment completed!"
+          echo "📱 Android APK: build/app/outputs/flutter-apk/app-release.apk"
+          echo "📦 Android AAB: build/app/outputs/bundle/release/app-release.aab"
+          echo "🌐 Web build: build/web"
+
