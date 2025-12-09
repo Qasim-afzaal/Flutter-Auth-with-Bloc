@@ -7,6 +7,9 @@ import 'core/theme/app_theme.dart';
 import 'core/theme/theme_service.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/bloc/auth_event.dart';
+import 'features/home/presentation/bloc/home_bloc.dart';
+import 'features/profile/presentation/bloc/profile_bloc.dart';
+import 'features/notification/presentation/bloc/notification_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +30,18 @@ class MyApp extends StatelessWidget {
         // Provide AuthBloc at the root level
         BlocProvider(
           create: (context) => di.sl<AuthBloc>()..add(AuthCheckRequested()),
+        ),
+        // Provide HomeBloc at the root level
+        BlocProvider(
+          create: (context) => di.sl<HomeBloc>(),
+        ),
+        // Provide ProfileBloc at the root level
+        BlocProvider(
+          create: (context) => di.sl<ProfileBloc>(),
+        ),
+        // Provide NotificationBloc at the root level
+        BlocProvider(
+          create: (context) => di.sl<NotificationBloc>(),
         ),
         // Provide ThemeService at the root level
         ChangeNotifierProvider.value(
