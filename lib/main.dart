@@ -10,6 +10,7 @@ import 'features/auth/presentation/bloc/auth_event.dart';
 import 'features/home/presentation/bloc/home_bloc.dart';
 import 'features/profile/presentation/bloc/profile_bloc.dart';
 import 'features/notification/presentation/bloc/notification_bloc.dart';
+import 'features/dashboard/presentation/bloc/dashboard_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +43,10 @@ class MyApp extends StatelessWidget {
         // Provide NotificationBloc at the root level
         BlocProvider(
           create: (context) => di.sl<NotificationBloc>(),
+        ),
+        // Provide DashboardBloc at the root level
+        BlocProvider(
+          create: (context) => di.sl<DashboardBloc>(),
         ),
         // Provide ThemeService at the root level
         ChangeNotifierProvider.value(
