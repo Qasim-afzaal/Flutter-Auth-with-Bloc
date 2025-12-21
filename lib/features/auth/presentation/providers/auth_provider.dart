@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../../../../core/utils/logger.dart';
+import '../../../../core/utils/validation_utils.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
 import '../../../../core/storage/secure_storage_service.dart';
