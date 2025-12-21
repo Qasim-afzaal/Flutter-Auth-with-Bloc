@@ -199,6 +199,47 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Refresh authentication token
+  /// Re-authenticates the user to refresh their session
+  Future<bool> refreshToken() async {
+    if (!_isAuthenticated || _user == null) {
+      _errorMessage = 'No active session to refresh';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      Logger.info('Refreshing authentication token');
+      
+      // Re-check auth status to refresh the session
+      await _checkAuthStatus();
+      
+      if (_isAuthenticated && _user != null) {
+        _isLoading = false;
+        notifyListeners();
+        Logger.info('Token refreshed successfully');
+        return true;
+      } else {
+        _isLoading = false;
+        _errorMessage = 'Session expired. Please login again';
+        _isAuthenticated = false;
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      Logger.error('Failed to refresh token', e);
+      _isLoading = false;
+      _errorMessage = 'Failed to refresh session: ${e.toString()}';
+      _isAuthenticated = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Update user profile information
   /// Updates the local user state with new profile data
   Future<bool> updateUserProfile({
