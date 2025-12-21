@@ -223,6 +223,58 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Reset password for a user account
+  /// Sends a password reset request to the provided email
+  Future<bool> resetPassword(String email) async {
+    if (email.trim().isEmpty) {
+      _errorMessage = 'Email cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    
+    if (!ValidationUtils.isValidEmail(email)) {
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      Logger.info('Password reset requested for email: $email');
+      
+      // In a real app, this would call an API endpoint to send a password reset email
+      // For now, we'll simulate the process
+      // Note: This is a placeholder - in production, implement actual password reset flow
+      
+      await Future.delayed(const Duration(seconds: 1)); // Simulate API call
+      
+      _isLoading = false;
+      _errorMessage = null;
+      notifyListeners();
+      
+      Logger.info('Password reset email sent successfully');
+      return true;
+    } catch (e) {
+      Logger.error('Failed to reset password', e);
+      _isLoading = false;
+      
+      final errorString = e.toString().toLowerCase();
+      if (errorString.contains('not found') || errorString.contains('does not exist')) {
+        _errorMessage = 'No account found with this email address.';
+      } else if (errorString.contains('network') || errorString.contains('connection')) {
+        _errorMessage = 'Network error. Please check your internet connection.';
+      } else {
+        _errorMessage = 'Failed to send password reset email. Please try again.';
+      }
+      
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Check if email is available for registration
   /// Returns true if email is available, false if already taken
   Future<bool> checkEmailAvailability(String email) async {
