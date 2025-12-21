@@ -199,6 +199,56 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Update user profile information
+  /// Updates the local user state with new profile data
+  Future<bool> updateUserProfile({
+    String? name,
+    String? avatar,
+    String? gender,
+    String? age,
+  }) async {
+    if (_user == null) {
+      _errorMessage = 'No user is currently logged in';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      // Create updated user with new values
+      final updatedUser = User(
+        id: _user!.id,
+        email: _user!.email,
+        name: name ?? _user!.name,
+        avatar: avatar ?? _user!.avatar,
+        createdAt: _user!.createdAt,
+        updatedAt: DateTime.now(),
+        authProvider: _user!.authProvider,
+        gender: gender ?? _user!.gender,
+        age: age ?? _user!.age,
+      );
+
+      _user = updatedUser;
+      _isLoading = false;
+      
+      // Save updated user data to secure storage
+      await _secureStorage.saveUserData(updatedUser.toJson());
+      
+      notifyListeners();
+      Logger.info('User profile updated successfully');
+      return true;
+    } catch (e) {
+      Logger.error('Failed to update user profile', e);
+      _isLoading = false;
+      _errorMessage = 'Failed to update profile: ${e.toString()}';
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Clear error message
   void clearError() {
     _errorMessage = null;
