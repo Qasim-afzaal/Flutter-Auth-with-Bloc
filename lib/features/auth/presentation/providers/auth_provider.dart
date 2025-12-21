@@ -66,6 +66,12 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
     
+    if (!ValidationUtils.isValidEmail(email)) {
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
+    
     if (password.isEmpty) {
       _errorMessage = 'Password cannot be empty';
       notifyListeners();
@@ -106,6 +112,25 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    // Input validation
+    if (name.trim().isEmpty) {
+      _errorMessage = 'Name cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    
+    if (email.trim().isEmpty) {
+      _errorMessage = 'Email cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    
+    if (password.isEmpty) {
+      _errorMessage = 'Password cannot be empty';
+      notifyListeners();
+      return false;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
