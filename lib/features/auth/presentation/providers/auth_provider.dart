@@ -97,9 +97,20 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Login failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      _isAuthenticated = false;
       
+      // Provide specific error messages based on error type
+      final errorString = e.toString().toLowerCase();
+      if (errorString.contains('invalid') || errorString.contains('incorrect')) {
+        _errorMessage = 'Invalid email or password. Please check your credentials.';
+      } else if (errorString.contains('network') || errorString.contains('connection')) {
+        _errorMessage = 'Network error. Please check your internet connection.';
+      } else if (errorString.contains('timeout')) {
+        _errorMessage = 'Request timed out. Please try again.';
+      } else {
+        _errorMessage = e.toString().replaceAll('Exception: ', '');
+      }
+      
+      _isAuthenticated = false;
       notifyListeners(); // Notify UI that login failed
       return false;
     }
@@ -166,9 +177,22 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Signup failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
-      _isAuthenticated = false;
       
+      // Provide specific error messages based on error type
+      final errorString = e.toString().toLowerCase();
+      if (errorString.contains('already exists') || errorString.contains('duplicate')) {
+        _errorMessage = 'An account with this email already exists.';
+      } else if (errorString.contains('network') || errorString.contains('connection')) {
+        _errorMessage = 'Network error. Please check your internet connection.';
+      } else if (errorString.contains('timeout')) {
+        _errorMessage = 'Request timed out. Please try again.';
+      } else if (errorString.contains('invalid')) {
+        _errorMessage = 'Invalid information provided. Please check your details.';
+      } else {
+        _errorMessage = e.toString().replaceAll('Exception: ', '');
+      }
+      
+      _isAuthenticated = false;
       notifyListeners(); // Notify UI that signup failed
       return false;
     }
