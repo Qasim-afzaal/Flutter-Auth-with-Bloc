@@ -13,6 +13,14 @@ import '../../../../core/storage/secure_storage_service.dart';
 /// - Uses ChangeNotifier instead of Bloc/BlocState
 /// - Uses notifyListeners() instead of emit()
 /// - Direct property access instead of state classes
+/// 
+/// Rate Limiting Considerations:
+/// - Authentication endpoints should implement rate limiting to prevent abuse
+/// - Recommended limits: 5 login attempts per 15 minutes per IP/email
+/// - Password reset: 3 requests per hour per email
+/// - Signup: 10 registrations per hour per IP
+/// - Consider implementing exponential backoff for failed attempts
+/// - Use secure storage for sensitive data (tokens, user info)
 class AuthProvider extends ChangeNotifier {
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
