@@ -125,8 +125,20 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
     
+    if (!ValidationUtils.isValidEmail(email)) {
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
+    
     if (password.isEmpty) {
       _errorMessage = 'Password cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    
+    if (!ValidationUtils.isValidPassword(password)) {
+      _errorMessage = 'Password must be at least 8 characters long';
       notifyListeners();
       return false;
     }
