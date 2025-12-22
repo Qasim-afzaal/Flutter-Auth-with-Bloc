@@ -123,6 +123,9 @@ class AuthProvider extends ChangeNotifier {
         name,
       );
       
+      // Save user data to secure storage for persistence
+      await _secureStorage.saveUserData(user.toJson());
+      
       _user = user;
       _isAuthenticated = true;
       _isLoading = false;
