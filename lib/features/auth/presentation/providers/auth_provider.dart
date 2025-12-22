@@ -62,6 +62,18 @@ class AuthProvider extends ChangeNotifier {
   /// Login method
   /// Equivalent to LoginRequested event in BLoC
   Future<bool> login(String email, String password) async {
+    // Input validation
+    if (email.trim().isEmpty) {
+      _errorMessage = 'Email cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    if (password.isEmpty) {
+      _errorMessage = 'Password cannot be empty';
+      notifyListeners();
+      return false;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
