@@ -70,6 +70,11 @@ class AuthProvider extends ChangeNotifier {
       notifyListeners();
       return false;
     }
+    if (!_isValidEmail(email)) {
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
     if (password.isEmpty) {
       _errorMessage = 'Password cannot be empty';
       notifyListeners();
@@ -179,6 +184,15 @@ class AuthProvider extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Validates email format
+  /// Returns true if email is valid, false otherwise
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email.trim());
   }
 }
 
