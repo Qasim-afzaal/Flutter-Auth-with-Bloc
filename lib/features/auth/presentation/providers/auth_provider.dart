@@ -82,6 +82,9 @@ class AuthProvider extends ChangeNotifier {
       Logger.info('Login requested with email: $email');
       final user = await _authRepository.login(email, password);
       
+      // Save user data to secure storage for persistence
+      await _secureStorage.saveUserData(user.toJson());
+      
       _user = user;
       _isAuthenticated = true;
       _isLoading = false;
