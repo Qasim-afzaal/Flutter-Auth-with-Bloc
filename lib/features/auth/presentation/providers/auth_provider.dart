@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../../core/utils/logger.dart';
 import '../../domain/entities/user.dart';
@@ -16,6 +17,7 @@ class AuthProvider extends ChangeNotifier {
   // Constants
   static const String _exceptionPrefix = 'Exception: ';
   static const int _minPasswordLength = 6;
+  static const Duration _operationTimeout = Duration(seconds: 30);
 
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
@@ -80,7 +82,10 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       Logger.info('Login requested with email: $email');
-      final user = await _authRepository.login(email, password);
+      final user = await _authRepository.login(email, password)
+          .timeout(_operationTimeout, onTimeout: () {
+        throw TimeoutException('Login request timed out');
+      });
       
       // Save user data to secure storage for persistence
       await _secureStorage.saveUserData(user.toJson());
