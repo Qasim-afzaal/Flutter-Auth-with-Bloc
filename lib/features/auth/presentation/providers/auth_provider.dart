@@ -122,6 +122,29 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    // Input validation
+    if (name.trim().isEmpty) {
+      _errorMessage = 'Name cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    if (email.trim().isEmpty) {
+      _errorMessage = 'Email cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    if (!_isValidEmail(email)) {
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
+    final passwordError = _validatePasswordStrength(password);
+    if (passwordError != null) {
+      _errorMessage = passwordError;
+      notifyListeners();
+      return false;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
@@ -195,6 +218,27 @@ class AuthProvider extends ChangeNotifier {
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     );
     return emailRegex.hasMatch(email.trim());
+  }
+
+  /// Validates password strength
+  /// Returns error message if password is weak, null if password is strong
+  String? _validatePasswordStrength(String password) {
+    if (password.length < _minPasswordLength) {
+      return 'Password must be at least $_minPasswordLength characters long';
+    }
+    // Check for at least one uppercase letter
+    if (!password.contains(RegExp(r'[A-Z]'))) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    // Check for at least one lowercase letter
+    if (!password.contains(RegExp(r'[a-z]'))) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    // Check for at least one digit
+    if (!password.contains(RegExp(r'[0-9]'))) {
+      return 'Password must contain at least one number';
+    }
+    return null; // Password is strong
   }
 
   @override
