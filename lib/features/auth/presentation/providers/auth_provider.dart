@@ -94,6 +94,7 @@ class AuthProvider extends ChangeNotifier {
       
       // Save user data to secure storage for persistence
       await _secureStorage.saveUserData(user.toJson());
+      Logger.info('User data saved to secure storage for user: ${user.email}');
       
       _user = user;
       _isAuthenticated = true;
@@ -101,7 +102,7 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       
       notifyListeners(); // Notify UI that login succeeded
-      Logger.info('Login successful');
+      Logger.info('Login successful for user: ${user.email} (ID: ${user.id})');
       return true;
     } catch (e) {
       Logger.error('Login failed', e);
@@ -126,7 +127,7 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners(); // Notify UI that loading started
 
     try {
-      Logger.info('Signup requested with email: $email');
+      Logger.info('Signup requested with email: $email, name: $name');
       final user = await _authRepository.userRegister(
         email,
         password,
@@ -135,6 +136,7 @@ class AuthProvider extends ChangeNotifier {
       
       // Save user data to secure storage for persistence
       await _secureStorage.saveUserData(user.toJson());
+      Logger.info('User data saved to secure storage for user: ${user.email}');
       
       _user = user;
       _isAuthenticated = true;
@@ -142,7 +144,7 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       
       notifyListeners(); // Notify UI that signup succeeded
-      Logger.info('Signup successful');
+      Logger.info('Signup successful for user: ${user.email} (ID: ${user.id})');
       return true;
     } catch (e) {
       Logger.error('Signup failed', e);
