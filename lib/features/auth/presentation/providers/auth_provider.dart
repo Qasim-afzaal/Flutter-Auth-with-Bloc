@@ -196,5 +196,12 @@ class AuthProvider extends ChangeNotifier {
     );
     return emailRegex.hasMatch(email.trim());
   }
+
+  @override
+  void dispose() {
+    // Clean up resources when provider is disposed
+    Logger.info('AuthProvider disposed');
+    super.dispose();
+  }
 }
 
