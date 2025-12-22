@@ -93,7 +93,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Login failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = e.toString().replaceAll(_exceptionPrefix, '');
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that login failed
@@ -131,7 +131,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Signup failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = e.toString().replaceAll(_exceptionPrefix, '');
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that signup failed
