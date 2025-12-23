@@ -124,6 +124,34 @@ The project follows Clean Architecture principles with three layers:
 - **I**nterface Segregation: Small, focused interfaces
 - **D**ependency Inversion: Depend on abstractions, not concretions
 
+## 🆕 Recent Updates
+
+### AuthProvider Enhancements (Latest)
+The Provider implementation has been enhanced with several improvements:
+
+1. **Constants & Configuration**
+   - Centralized constants for error messages and validation rules
+   - Configurable timeout duration (30 seconds)
+
+2. **Input Validation**
+   - Email format validation using regex pattern
+   - Password strength validation (minimum 6 characters, uppercase, lowercase, numbers)
+   - Empty field validation for all inputs
+
+3. **Error Handling**
+   - Improved error message formatting
+   - Consistent error handling across all methods
+   - User-friendly error messages
+
+4. **Performance & Reliability**
+   - Timeout handling for async operations
+   - Proper resource cleanup with dispose method
+   - Enhanced logging with context information
+
+5. **Data Persistence**
+   - Automatic user data saving to secure storage after login/signup
+   - Ensures data persistence across app restarts
+
 ## 📚 State Management Comparison
 
 ### BLoC Pattern
@@ -160,19 +188,38 @@ BlocBuilder<AuthBloc, AuthBlocState>(
 - Less boilerplate
 - Easy to understand
 - Good for simple to medium complexity
+- **Enhanced with:**
+  - Email format validation
+  - Password strength validation
+  - Input validation
+  - Timeout handling for async operations
+  - Improved error handling
+  - Enhanced logging with context
+  - Resource cleanup with dispose method
 
 **Usage:**
 ```dart
 // Call method directly
-context.read<AuthProvider>().login(email, password);
+final success = await context.read<AuthProvider>().login(email, password);
 
 // Listen to state
 Consumer<AuthProvider>(
   builder: (context, authProvider, child) {
     if (authProvider.isLoading) return CircularProgressIndicator();
+    if (authProvider.errorMessage != null) {
+      return Text('Error: ${authProvider.errorMessage}');
+    }
+    if (authProvider.isAuthenticated) return HomePage();
     return LoginPage();
   },
 )
+```
+
+**Validation Features:**
+- Email format validation using regex
+- Password strength validation (minimum length, uppercase, lowercase, numbers)
+- Input validation for empty fields
+- 30-second timeout for login operations
 ```
 
 ### Riverpod Pattern
@@ -214,6 +261,14 @@ await authNotifier.login(email, password);
 - ✅ Auto-login on app restart
 - ✅ Secure token storage
 - ✅ Logout functionality
+- ✅ **Email format validation** - Validates email format using regex
+- ✅ **Password strength validation** - Enforces strong passwords (min length, uppercase, lowercase, numbers)
+- ✅ **Input validation** - Validates empty fields before API calls
+- ✅ **Timeout handling** - 30-second timeout for async operations
+- ✅ **Enhanced error handling** - Better error message formatting
+- ✅ **Improved logging** - Context-rich logging with user details
+- ✅ **Resource cleanup** - Proper disposal of resources
+- ✅ **User data persistence** - Automatically saves user data to secure storage after login/signup
 
 ### Dashboard
 - ✅ Bottom navigation (Home, Notifications, Profile)
@@ -303,6 +358,11 @@ API_BASE_URL=http://your-api-url.com/api/
 - ✅ Error handling
 - ✅ Secure storage for sensitive data
 - ✅ Type-safe state management
+- ✅ Input validation before API calls
+- ✅ Timeout handling for network operations
+- ✅ Resource cleanup (dispose methods)
+- ✅ Comprehensive logging
+- ✅ Password strength validation
 
 ## 🤝 Contributing
 
