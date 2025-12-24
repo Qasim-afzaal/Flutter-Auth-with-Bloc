@@ -217,6 +217,10 @@ class AuthProvider extends ChangeNotifier {
       
       _user = user;
       _isAuthenticated = true;
+      
+      // Persist user data to secure storage
+      await _secureStorage.saveUserData(user.toJson());
+      
       _isLoading = false;
       _errorMessage = null;
       
@@ -263,6 +267,29 @@ class AuthProvider extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Refresh user data from secure storage
+  /// Useful when user data might have been updated elsewhere
+  /// Returns true if user data was successfully refreshed, false otherwise
+  Future<bool> refreshUserData() async {
+    if (!_isAuthenticated) {
+      return false;
+    }
+
+    try {
+      final userData = await _secureStorage.getUserData();
+      if (userData != null) {
+        _user = User.fromJson(userData);
+        notifyListeners();
+        Logger.info('User data refreshed successfully');
+        return true;
+      }
+      return false;
+    } catch (e) {
+      Logger.error('Error refreshing user data', e);
+      return false;
+    }
   }
 
   /// Dispose method for cleanup
