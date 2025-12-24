@@ -75,6 +75,29 @@ class AuthProvider extends ChangeNotifier {
     return hasLetter && hasNumber;
   }
 
+  /// Retries a future operation with exponential backoff
+  /// Returns the result of the operation or throws the last error
+  Future<T> _retryOperation<T>(
+    Future<T> Function() operation, {
+    int maxAttempts = maxRetryAttempts,
+  }) async {
+    int attempts = 0;
+    while (attempts < maxAttempts) {
+      try {
+        return await operation();
+      } catch (e) {
+        attempts++;
+        if (attempts >= maxAttempts) {
+          rethrow;
+        }
+        // Wait before retrying (exponential backoff)
+        await Future.delayed(retryDelay * attempts);
+        Logger.info('Retrying operation (attempt $attempts/$maxAttempts)');
+      }
+    }
+    throw Exception('Max retry attempts reached');
+  }
+
   /// Extracts user-friendly error message from exception
   /// Returns a clean error message string
   String _extractErrorMessage(dynamic error) {
@@ -146,6 +169,10 @@ class AuthProvider extends ChangeNotifier {
       
       _user = user;
       _isAuthenticated = true;
+      
+      // Persist user data to secure storage
+      await _secureStorage.saveUserData(user.toJson());
+      
       _isLoading = false;
       _errorMessage = null;
       
