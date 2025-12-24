@@ -22,6 +22,9 @@ class AuthProvider extends ChangeNotifier {
   static const int minNameLength = 2;
   static const int maxNameLength = 100;
   static const int maxEmailLength = 255;
+  
+  // Network timeout constants
+  static const Duration networkTimeout = Duration(seconds: 30);
 
   // State properties (equivalent to BLoC states)
   User? _user;
@@ -126,7 +129,9 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       Logger.info('Login requested with email: $email');
-      final user = await _authRepository.login(email, password);
+      final user = await _authRepository
+          .login(email, password)
+          .timeout(networkTimeout);
       
       _user = user;
       _isAuthenticated = true;
@@ -160,11 +165,9 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       Logger.info('Signup requested with email: $email');
-      final user = await _authRepository.userRegister(
-        email,
-        password,
-        name,
-      );
+      final user = await _authRepository
+          .userRegister(email, password, name)
+          .timeout(networkTimeout);
       
       _user = user;
       _isAuthenticated = true;
@@ -177,7 +180,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Signup failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = _extractErrorMessage(e);
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that signup failed
