@@ -122,6 +122,13 @@ class AuthProvider extends ChangeNotifier {
 
   /// Login method
   /// Equivalent to LoginRequested event in BLoC
+  /// 
+  /// [email] - User's email address
+  /// [password] - User's password
+  /// 
+  /// Returns true if login is successful, false otherwise
+  /// Sets loading state and error message accordingly
+  /// Automatically saves user data to secure storage on success
   Future<bool> login(String email, String password) async {
     _isLoading = true;
     _errorMessage = null;
