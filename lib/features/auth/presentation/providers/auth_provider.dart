@@ -25,6 +25,10 @@ class AuthProvider extends ChangeNotifier {
   
   // Network timeout constants
   static const Duration networkTimeout = Duration(seconds: 30);
+  
+  // Retry configuration
+  static const int maxRetryAttempts = 3;
+  static const Duration retryDelay = Duration(seconds: 2);
 
   // State properties (equivalent to BLoC states)
   User? _user;
@@ -232,6 +236,18 @@ class AuthProvider extends ChangeNotifier {
   void clearError() {
     _errorMessage = null;
     notifyListeners();
+  }
+
+  /// Dispose method for cleanup
+  /// Called when the provider is no longer needed
+  /// Prevents memory leaks by removing all listeners
+  @override
+  void dispose() {
+    // Clear any pending operations
+    _isLoading = false;
+    _errorMessage = null;
+    // Call super dispose to remove all listeners
+    super.dispose();
   }
 }
 
