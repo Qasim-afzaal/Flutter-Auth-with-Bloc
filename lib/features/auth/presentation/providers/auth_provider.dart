@@ -44,6 +44,18 @@ class AuthProvider extends ChangeNotifier {
     _checkAuthStatus();
   }
 
+  /// Validates email format
+  /// Returns true if email is valid, false otherwise
+  bool _isValidEmail(String email) {
+    if (email.isEmpty || email.length > maxEmailLength) {
+      return false;
+    }
+    final emailRegex = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    return emailRegex.hasMatch(email);
+  }
+
   /// Check authentication status on app start
   /// Equivalent to AuthCheckRequested event in BLoC
   Future<void> _checkAuthStatus() async {
