@@ -161,6 +161,14 @@ class AuthProvider extends ChangeNotifier {
 
   /// Signup method
   /// Equivalent to RegisterRequested event in BLoC
+  /// 
+  /// [name] - User's full name (2-100 characters)
+  /// [email] - User's email address (must be valid format)
+  /// [password] - User's password (8-128 characters, must contain letters and numbers)
+  /// 
+  /// Returns true if signup is successful, false otherwise
+  /// Sets loading state and error message accordingly
+  /// Automatically saves user data to secure storage on success
   Future<bool> signup({
     required String name,
     required String email,
