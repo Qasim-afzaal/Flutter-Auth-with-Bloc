@@ -68,6 +68,37 @@ class AuthProvider extends ChangeNotifier {
     return hasLetter && hasNumber;
   }
 
+  /// Extracts user-friendly error message from exception
+  /// Returns a clean error message string
+  String _extractErrorMessage(dynamic error) {
+    if (error == null) return 'An unknown error occurred';
+    
+    final errorString = error.toString();
+    
+    // Remove common exception prefixes
+    String message = errorString
+        .replaceAll('Exception: ', '')
+        .replaceAll('Error: ', '')
+        .trim();
+    
+    // Handle common error patterns
+    if (message.toLowerCase().contains('network') || 
+        message.toLowerCase().contains('connection')) {
+      return 'Network error. Please check your internet connection.';
+    }
+    
+    if (message.toLowerCase().contains('timeout')) {
+      return 'Request timed out. Please try again.';
+    }
+    
+    if (message.toLowerCase().contains('unauthorized') ||
+        message.toLowerCase().contains('invalid credentials')) {
+      return 'Invalid email or password.';
+    }
+    
+    return message.isEmpty ? 'An error occurred' : message;
+  }
+
   /// Check authentication status on app start
   /// Equivalent to AuthCheckRequested event in BLoC
   Future<void> _checkAuthStatus() async {
