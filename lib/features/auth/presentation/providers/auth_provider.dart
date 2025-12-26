@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import '../../../../core/utils/logger.dart';
 import '../../domain/entities/user.dart';
@@ -73,7 +74,13 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       Logger.info('Login requested with email: $email');
-      final user = await _authRepository.login(email, password);
+      final user = await _authRepository.login(email, password)
+          .timeout(
+            Duration(seconds: AuthConstants.networkTimeoutSeconds),
+            onTimeout: () {
+              throw TimeoutException('Login request timed out');
+            },
+          );
       
       _user = user;
       _isAuthenticated = true;
@@ -111,6 +118,11 @@ class AuthProvider extends ChangeNotifier {
         email,
         password,
         name,
+      ).timeout(
+        Duration(seconds: AuthConstants.networkTimeoutSeconds),
+        onTimeout: () {
+          throw TimeoutException('Signup request timed out');
+        },
       );
       
       _user = user;
