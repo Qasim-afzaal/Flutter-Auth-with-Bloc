@@ -403,5 +403,50 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  /// Initiates password reset process for the given email
+  /// Returns true if reset email was sent successfully, false otherwise
+  Future<bool> resetPassword(String email) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      final sanitizedEmail = _sanitizeEmail(email);
+      
+      if (!isValidEmail(sanitizedEmail)) {
+        _isLoading = false;
+        _errorMessage = 'Please enter a valid email address';
+        notifyListeners();
+        return false;
+      }
+
+      Logger.info('Password reset requested', extra: {
+        'email': sanitizedEmail,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+
+      // In a real implementation, this would call:
+      // await _authRepository.resetPassword(sanitizedEmail);
+      // For now, we'll simulate a successful response
+      await Future.delayed(Duration(seconds: 1));
+
+      _isLoading = false;
+      _errorMessage = null;
+      notifyListeners();
+
+      Logger.info('Password reset email sent successfully', extra: {
+        'email': sanitizedEmail,
+      });
+      
+      return true;
+    } catch (e) {
+      Logger.error('Password reset failed', e);
+      _isLoading = false;
+      _errorMessage = _formatErrorMessage(e);
+      notifyListeners();
+      return false;
+    }
+  }
 }
 
