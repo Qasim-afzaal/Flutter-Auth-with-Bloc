@@ -171,5 +171,15 @@ class AuthProvider extends ChangeNotifier {
     );
     return emailRegex.hasMatch(email.trim());
   }
+
+  /// Validates password strength
+  /// Returns true if password meets minimum requirements (8+ chars, 1 uppercase, 1 lowercase, 1 number)
+  bool isStrongPassword(String password) {
+    if (password.length < 8) return false;
+    if (!password.contains(RegExp(r'[A-Z]'))) return false;
+    if (!password.contains(RegExp(r'[a-z]'))) return false;
+    if (!password.contains(RegExp(r'[0-9]'))) return false;
+    return true;
+  }
 }
 
