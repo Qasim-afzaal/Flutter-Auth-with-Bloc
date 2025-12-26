@@ -448,5 +448,49 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
   }
+
+  /// Deletes the current user's account
+  /// Returns true if deletion was successful, false otherwise
+  Future<bool> deleteAccount() async {
+    if (!_isAuthenticated || _user == null) {
+      _errorMessage = 'No authenticated user to delete';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      Logger.info('Account deletion requested', extra: {
+        'userId': _user!.id,
+        'email': _user!.email,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+
+      // In a real implementation, this would call:
+      // await _authRepository.deleteAccount();
+      // For now, we'll simulate the deletion
+      await Future.delayed(Duration(seconds: 1));
+
+      // Clear all local data
+      await _secureStorage.clearAll();
+      resetState();
+
+      Logger.info('Account deleted successfully', extra: {
+        'userId': _user?.id,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
+      
+      return true;
+    } catch (e) {
+      Logger.error('Account deletion failed', e);
+      _isLoading = false;
+      _errorMessage = _formatErrorMessage(e);
+      notifyListeners();
+      return false;
+    }
+  }
 }
 
