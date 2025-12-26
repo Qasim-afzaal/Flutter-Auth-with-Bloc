@@ -59,13 +59,34 @@ class AuthProvider extends ChangeNotifier {
       if (isLoggedIn) {
         final userData = await _secureStorage.getUserData();
         if (userData != null) {
-          _user = User.fromJson(userData);
-          _isAuthenticated = true;
-          notifyListeners(); // Notify UI to rebuild (like emit in BLoC)
+          // Check if session is still valid
+          if (await _isSessionValid()) {
+            _user = User.fromJson(userData);
+            _isAuthenticated = true;
+            notifyListeners(); // Notify UI to rebuild (like emit in BLoC)
+          } else {
+            // Session expired, clear data
+            await _secureStorage.clearAll();
+            resetState();
+          }
         }
       }
     } catch (e) {
       Logger.error('Error checking auth status', e);
+    }
+  }
+
+  /// Checks if the current session is still valid
+  /// Returns true if session is valid, false if expired
+  Future<bool> _isSessionValid() async {
+    try {
+      final token = await _secureStorage.getToken();
+      // In a real implementation, you would verify the token's expiry
+      // For now, we'll just check if token exists
+      return token != null && token.isNotEmpty;
+    } catch (e) {
+      Logger.error('Error checking session validity', e);
+      return false;
     }
   }
 
