@@ -31,12 +31,16 @@ class AuthProvider extends ChangeNotifier {
   bool _isLoading = false;
   String? _errorMessage;
   bool _isAuthenticated = false;
+  bool _isRefreshingToken = false;
+  bool _isLoggingOut = false;
 
   // Getters (equivalent to accessing BLoC state)
   User? get user => _user;
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
   bool get isAuthenticated => _isAuthenticated;
+  bool get isRefreshingToken => _isRefreshingToken;
+  bool get isLoggingOut => _isLoggingOut;
 
   AuthProvider({
     required AuthRepository authRepository,
@@ -171,6 +175,7 @@ class AuthProvider extends ChangeNotifier {
   /// Equivalent to LogoutRequested event in BLoC
   Future<void> logout() async {
     _isLoading = true;
+    _isLoggingOut = true;
     notifyListeners();
 
     try {
@@ -180,6 +185,7 @@ class AuthProvider extends ChangeNotifier {
       _user = null;
       _isAuthenticated = false;
       _isLoading = false;
+      _isLoggingOut = false;
       _errorMessage = null;
       
       notifyListeners(); // Notify UI that logout succeeded
@@ -187,6 +193,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Logout failed', e);
       _isLoading = false;
+      _isLoggingOut = false;
       _errorMessage = e.toString();
       notifyListeners();
     }
@@ -214,11 +221,17 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
 
+    _isRefreshingToken = true;
+    notifyListeners();
+
     try {
       Logger.info('Token refresh requested');
       // In a real implementation, this would call the repository to refresh the token
       // For now, we'll just verify the current session is still valid
       final isLoggedIn = await _secureStorage.isLoggedIn();
+      _isRefreshingToken = false;
+      notifyListeners();
+      
       if (isLoggedIn) {
         Logger.info('Token refresh successful');
         return true;
@@ -226,6 +239,8 @@ class AuthProvider extends ChangeNotifier {
       return false;
     } catch (e) {
       Logger.error('Token refresh failed', e);
+      _isRefreshingToken = false;
+      notifyListeners();
       return false;
     }
   }
