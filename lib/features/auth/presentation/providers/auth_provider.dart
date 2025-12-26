@@ -74,7 +74,10 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       final sanitizedEmail = _sanitizeEmail(email);
-      Logger.info('Login requested with email: $sanitizedEmail');
+      Logger.info('Login requested', extra: {
+        'email': sanitizedEmail,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
       final user = await _authRepository.login(sanitizedEmail, password)
           .timeout(
             Duration(seconds: AuthConstants.networkTimeoutSeconds),
@@ -89,7 +92,11 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       
       notifyListeners(); // Notify UI that login succeeded
-      Logger.info('Login successful');
+      Logger.info('Login successful', extra: {
+        'userId': user.id,
+        'email': sanitizedEmail,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
       return true;
     } catch (e) {
       Logger.error('Login failed', e);
@@ -115,7 +122,11 @@ class AuthProvider extends ChangeNotifier {
 
     try {
       final sanitizedEmail = _sanitizeEmail(email);
-      Logger.info('Signup requested with email: $sanitizedEmail');
+      Logger.info('Signup requested', extra: {
+        'email': sanitizedEmail,
+        'name': name,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
       final user = await _authRepository.userRegister(
         sanitizedEmail,
         password,
@@ -133,7 +144,11 @@ class AuthProvider extends ChangeNotifier {
       _errorMessage = null;
       
       notifyListeners(); // Notify UI that signup succeeded
-      Logger.info('Signup successful');
+      Logger.info('Signup successful', extra: {
+        'userId': user.id,
+        'email': sanitizedEmail,
+        'timestamp': DateTime.now().toIso8601String(),
+      });
       return true;
     } catch (e) {
       Logger.error('Signup failed', e);
