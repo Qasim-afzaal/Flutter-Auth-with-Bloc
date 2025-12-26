@@ -258,12 +258,24 @@ class AuthProvider extends ChangeNotifier {
   /// Formats error messages for user-friendly display
   String _formatErrorMessage(dynamic error) {
     final errorString = error.toString();
+    
+    // Handle specific error types
+    if (errorString.contains('TimeoutException') || 
+        errorString.contains('SocketException') ||
+        errorString.contains('NetworkException')) {
+      return AuthConstants.networkErrorMessage;
+    }
+    
+    if (errorString.contains('AuthFailure') || 
+        errorString.contains('Invalid credentials') ||
+        errorString.contains('Unauthorized')) {
+      return AuthConstants.invalidCredentialsMessage;
+    }
+    
     if (errorString.contains('Exception: ')) {
       return errorString.replaceAll('Exception: ', '');
     }
-    if (errorString.contains('TimeoutException')) {
-      return AuthConstants.networkErrorMessage;
-    }
+    
     return errorString.isNotEmpty ? errorString : AuthConstants.defaultErrorMessage;
   }
 
