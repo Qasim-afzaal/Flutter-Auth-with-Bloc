@@ -86,7 +86,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Login failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = _formatErrorMessage(e);
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that login failed
@@ -124,7 +124,7 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Signup failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      _errorMessage = _formatErrorMessage(e);
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that signup failed
@@ -180,6 +180,18 @@ class AuthProvider extends ChangeNotifier {
     if (!password.contains(RegExp(r'[a-z]'))) return false;
     if (!password.contains(RegExp(r'[0-9]'))) return false;
     return true;
+  }
+
+  /// Formats error messages for user-friendly display
+  String _formatErrorMessage(dynamic error) {
+    final errorString = error.toString();
+    if (errorString.contains('Exception: ')) {
+      return errorString.replaceAll('Exception: ', '');
+    }
+    if (errorString.contains('TimeoutException')) {
+      return AuthConstants.networkErrorMessage;
+    }
+    return errorString.isNotEmpty ? errorString : AuthConstants.defaultErrorMessage;
   }
 }
 
