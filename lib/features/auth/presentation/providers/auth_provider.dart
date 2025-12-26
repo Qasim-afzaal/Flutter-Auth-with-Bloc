@@ -205,5 +205,25 @@ class AuthProvider extends ChangeNotifier {
     }
     return errorString.isNotEmpty ? errorString : AuthConstants.defaultErrorMessage;
   }
+
+  /// Retries an operation with exponential backoff
+  Future<T> _retryOperation<T>(
+    Future<T> Function() operation, {
+    int maxAttempts = AuthConstants.maxRetryAttempts,
+  }) async {
+    int attempt = 0;
+    while (attempt < maxAttempts) {
+      try {
+        return await operation();
+      } catch (e) {
+        attempt++;
+        if (attempt >= maxAttempts) {
+          rethrow;
+        }
+        await Future.delayed(Duration(seconds: attempt * 2));
+      }
+    }
+    throw Exception('Max retry attempts reached');
+  }
 }
 
