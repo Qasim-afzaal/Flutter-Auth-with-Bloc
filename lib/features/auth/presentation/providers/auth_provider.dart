@@ -127,8 +127,30 @@ class AuthProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
 
+    // Validate input parameters
+    if (name.trim().isEmpty) {
+      _isLoading = false;
+      _errorMessage = 'Name cannot be empty';
+      notifyListeners();
+      return false;
+    }
+
+    final sanitizedEmail = _sanitizeEmail(email);
+    if (!isValidEmail(sanitizedEmail)) {
+      _isLoading = false;
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
+
+    if (!isStrongPassword(password)) {
+      _isLoading = false;
+      _errorMessage = 'Password must be at least 8 characters with uppercase, lowercase, and number';
+      notifyListeners();
+      return false;
+    }
+
     try {
-      final sanitizedEmail = _sanitizeEmail(email);
       Logger.info('Signup requested', extra: {
         'email': sanitizedEmail,
         'name': name,
