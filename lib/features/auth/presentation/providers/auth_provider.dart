@@ -91,6 +91,9 @@ class AuthProvider extends ChangeNotifier {
       _isLoading = false;
       _errorMessage = null;
       
+      // Persist user data to secure storage
+      await _secureStorage.saveUserData(user.toJson());
+      
       notifyListeners(); // Notify UI that login succeeded
       Logger.info('Login successful', extra: {
         'userId': user.id,
@@ -142,6 +145,9 @@ class AuthProvider extends ChangeNotifier {
       _isAuthenticated = true;
       _isLoading = false;
       _errorMessage = null;
+      
+      // Persist user data to secure storage
+      await _secureStorage.saveUserData(user.toJson());
       
       notifyListeners(); // Notify UI that signup succeeded
       Logger.info('Signup successful', extra: {
