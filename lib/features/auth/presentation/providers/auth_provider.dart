@@ -192,6 +192,15 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Resets all authentication state to initial values
+  void resetState() {
+    _user = null;
+    _isLoading = false;
+    _errorMessage = null;
+    _isAuthenticated = false;
+    notifyListeners();
+  }
+
   /// Sanitizes email input by trimming whitespace and converting to lowercase
   String _sanitizeEmail(String email) {
     return email.trim().toLowerCase();
