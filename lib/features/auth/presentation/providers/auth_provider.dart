@@ -22,6 +22,29 @@ class AuthConstants {
 /// - Uses ChangeNotifier instead of Bloc/BlocState
 /// - Uses notifyListeners() instead of emit()
 /// - Direct property access instead of state classes
+/// 
+/// Example usage:
+/// ```dart
+/// final authProvider = AuthProvider(
+///   authRepository: authRepository,
+///   secureStorage: secureStorage,
+/// );
+/// 
+/// // Login
+/// final success = await authProvider.login('user@example.com', 'password123');
+/// 
+/// // Check authentication status
+/// if (authProvider.isAuthenticated) {
+///   print('User: ${authProvider.user?.email}');
+/// }
+/// 
+/// // Listen to changes
+/// authProvider.addListener(() {
+///   if (authProvider.isAuthenticated) {
+///     // Navigate to home
+///   }
+/// });
+/// ```
 class AuthProvider extends ChangeNotifier {
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
