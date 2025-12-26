@@ -73,8 +73,9 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners(); // Notify UI that loading started
 
     try {
-      Logger.info('Login requested with email: $email');
-      final user = await _authRepository.login(email, password)
+      final sanitizedEmail = _sanitizeEmail(email);
+      Logger.info('Login requested with email: $sanitizedEmail');
+      final user = await _authRepository.login(sanitizedEmail, password)
           .timeout(
             Duration(seconds: AuthConstants.networkTimeoutSeconds),
             onTimeout: () {
@@ -113,9 +114,10 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners(); // Notify UI that loading started
 
     try {
-      Logger.info('Signup requested with email: $email');
+      final sanitizedEmail = _sanitizeEmail(email);
+      Logger.info('Signup requested with email: $sanitizedEmail');
       final user = await _authRepository.userRegister(
-        email,
+        sanitizedEmail,
         password,
         name,
       ).timeout(
@@ -175,13 +177,19 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sanitizes email input by trimming whitespace and converting to lowercase
+  String _sanitizeEmail(String email) {
+    return email.trim().toLowerCase();
+  }
+
   /// Validates email format
   /// Returns true if email is valid, false otherwise
   bool isValidEmail(String email) {
+    final sanitizedEmail = _sanitizeEmail(email);
     final emailRegex = RegExp(
       r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
     );
-    return emailRegex.hasMatch(email.trim());
+    return emailRegex.hasMatch(sanitizedEmail);
   }
 
   /// Validates password strength
