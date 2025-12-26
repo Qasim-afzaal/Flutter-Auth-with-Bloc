@@ -57,6 +57,13 @@ class AuthProvider extends ChangeNotifier {
   bool _isRefreshingToken = false;
   bool _isLoggingOut = false;
 
+  // Analytics tracking
+  void _trackAuthEvent(String eventName, {Map<String, dynamic>? properties}) {
+    // In a real implementation, this would call an analytics service
+    // For example: AnalyticsService.track(eventName, properties: properties);
+    Logger.info('Analytics: $eventName', extra: properties ?? {});
+  }
+
   // Getters (equivalent to accessing BLoC state)
   User? get user => _user;
   bool get isLoading => _isLoading;
@@ -148,6 +155,13 @@ class AuthProvider extends ChangeNotifier {
         'email': sanitizedEmail,
         'timestamp': DateTime.now().toIso8601String(),
       });
+      
+      // Track analytics event
+      _trackAuthEvent('user_login_success', properties: {
+        'userId': user.id,
+        'email': sanitizedEmail,
+      });
+      
       return true;
     } catch (e) {
       Logger.error('Login failed', e);
@@ -156,6 +170,13 @@ class AuthProvider extends ChangeNotifier {
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that login failed
+      
+      // Track analytics event
+      _trackAuthEvent('user_login_failed', properties: {
+        'error': _errorMessage,
+        'email': sanitizedEmail,
+      });
+      
       return false;
     }
   }
@@ -225,6 +246,13 @@ class AuthProvider extends ChangeNotifier {
         'email': sanitizedEmail,
         'timestamp': DateTime.now().toIso8601String(),
       });
+      
+      // Track analytics event
+      _trackAuthEvent('user_signup_success', properties: {
+        'userId': user.id,
+        'email': sanitizedEmail,
+      });
+      
       return true;
     } catch (e) {
       Logger.error('Signup failed', e);
