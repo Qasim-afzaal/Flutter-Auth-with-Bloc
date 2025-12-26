@@ -379,5 +379,29 @@ class AuthProvider extends ChangeNotifier {
     }
     throw Exception('Max retry attempts reached');
   }
+
+  /// Checks if an email is already registered
+  /// Returns true if email exists, false otherwise
+  /// Note: This is a placeholder implementation - in production, this would call an API endpoint
+  Future<bool> isEmailRegistered(String email) async {
+    try {
+      final sanitizedEmail = _sanitizeEmail(email);
+      if (!isValidEmail(sanitizedEmail)) {
+        return false;
+      }
+      
+      // In a real implementation, this would call an API endpoint like:
+      // await _authRepository.checkEmailExists(sanitizedEmail);
+      // For now, we'll return false as a placeholder
+      Logger.info('Email registration check requested', extra: {
+        'email': sanitizedEmail,
+      });
+      
+      return false; // Placeholder - would be replaced with actual API call
+    } catch (e) {
+      Logger.error('Error checking email registration', e);
+      return false;
+    }
+  }
 }
 
