@@ -122,6 +122,13 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    // Validate email format
+    if (!_isValidEmail(email)) {
+      _errorMessage = 'Please enter a valid email address';
+      notifyListeners();
+      return false;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
