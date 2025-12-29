@@ -81,6 +81,13 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
 
+    // Validate password length
+    if (!_isValidPassword(password)) {
+      _errorMessage = 'Password must be between $_minPasswordLength and $_maxPasswordLength characters';
+      notifyListeners();
+      return false;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
