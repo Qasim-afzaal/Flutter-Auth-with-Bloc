@@ -12,6 +12,14 @@ import '../../../../core/storage/secure_storage_service.dart';
 /// - Uses ChangeNotifier instead of Bloc/BlocState
 /// - Uses notifyListeners() instead of emit()
 /// - Direct property access instead of state classes
+/// 
+/// Features:
+/// - Email and password validation
+/// - Session management
+/// - Token refresh
+/// - User profile updates
+/// - Password change functionality
+/// - Enhanced error handling with user-friendly messages
 class AuthProvider extends ChangeNotifier {
   final AuthRepository _authRepository;
   final SecureStorageService _secureStorage;
