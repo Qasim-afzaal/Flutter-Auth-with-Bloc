@@ -182,7 +182,27 @@ class AuthProvider extends ChangeNotifier {
     } catch (e) {
       Logger.error('Signup failed', e);
       _isLoading = false;
-      _errorMessage = e.toString().replaceAll('Exception: ', '');
+      
+      // Improved error message handling
+      String errorMsg = e.toString();
+      if (errorMsg.contains('Exception: ')) {
+        errorMsg = errorMsg.replaceAll('Exception: ', '');
+      } else if (errorMsg.contains('Exception')) {
+        errorMsg = errorMsg.replaceAll('Exception', '').trim();
+      }
+      
+      // Provide user-friendly error messages
+      if (errorMsg.toLowerCase().contains('network') || 
+          errorMsg.toLowerCase().contains('connection')) {
+        errorMsg = 'Network error. Please check your connection.';
+      } else if (errorMsg.toLowerCase().contains('email') && 
+                 errorMsg.toLowerCase().contains('exist')) {
+        errorMsg = 'Email already registered. Please use a different email.';
+      } else if (errorMsg.isEmpty) {
+        errorMsg = 'Signup failed. Please try again.';
+      }
+      
+      _errorMessage = errorMsg;
       _isAuthenticated = false;
       
       notifyListeners(); // Notify UI that signup failed
