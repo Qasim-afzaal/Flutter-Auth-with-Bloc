@@ -21,6 +21,9 @@ class AuthProvider extends ChangeNotifier {
   static const int _minPasswordLength = 8;
   static const int _maxPasswordLength = 128;
 
+  // Session constants
+  static const Duration _sessionTimeout = Duration(hours: 24);
+
   // State properties (equivalent to BLoC states)
   User? _user;
   bool _isLoading = false;
