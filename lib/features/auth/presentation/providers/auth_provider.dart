@@ -42,6 +42,11 @@ class AuthProvider extends ChangeNotifier {
     _checkAuthStatus();
   }
 
+  /// Validates email format using regex
+  bool _isValidEmail(String email) {
+    return RegExp(_emailRegex).hasMatch(email);
+  }
+
   /// Check authentication status on app start
   /// Equivalent to AuthCheckRequested event in BLoC
   Future<void> _checkAuthStatus() async {
