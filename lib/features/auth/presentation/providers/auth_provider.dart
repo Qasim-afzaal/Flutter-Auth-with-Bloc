@@ -109,14 +109,23 @@ class AuthProvider extends ChangeNotifier {
       Logger.info('Login requested with email: $email');
       final user = await _authRepository.login(email, password);
       
-      _user = user;
-      _isAuthenticated = true;
-      _isLoading = false;
-      _errorMessage = null;
-      
-      notifyListeners(); // Notify UI that login succeeded
-      Logger.info('Login successful');
-      return true;
+      if (user != null) {
+        _user = user;
+        _isAuthenticated = true;
+        _isLoading = false;
+        _errorMessage = null;
+        
+        notifyListeners(); // Notify UI that login succeeded
+        Logger.info('Login successful for user: ${user.email}');
+        return true;
+      } else {
+        Logger.warning('Login returned null user');
+        _isLoading = false;
+        _errorMessage = 'Login failed. Please try again.';
+        _isAuthenticated = false;
+        notifyListeners();
+        return false;
+      }
     } catch (e) {
       Logger.error('Login failed', e);
       _isLoading = false;
@@ -174,21 +183,30 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners(); // Notify UI that loading started
 
     try {
-      Logger.info('Signup requested with email: $email');
+      Logger.info('Signup requested with email: $email, name: $name');
       final user = await _authRepository.userRegister(
         email,
         password,
         name,
       );
       
-      _user = user;
-      _isAuthenticated = true;
-      _isLoading = false;
-      _errorMessage = null;
-      
-      notifyListeners(); // Notify UI that signup succeeded
-      Logger.info('Signup successful');
-      return true;
+      if (user != null) {
+        _user = user;
+        _isAuthenticated = true;
+        _isLoading = false;
+        _errorMessage = null;
+        
+        notifyListeners(); // Notify UI that signup succeeded
+        Logger.info('Signup successful for user: ${user.email} (ID: ${user.id})');
+        return true;
+      } else {
+        Logger.warning('Signup returned null user');
+        _isLoading = false;
+        _errorMessage = 'Signup failed. Please try again.';
+        _isAuthenticated = false;
+        notifyListeners();
+        return false;
+      }
     } catch (e) {
       Logger.error('Signup failed', e);
       _isLoading = false;
