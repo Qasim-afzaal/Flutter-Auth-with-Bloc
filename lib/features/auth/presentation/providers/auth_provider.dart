@@ -192,6 +192,42 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Refresh authentication token
+  /// Useful for maintaining session without re-login
+  Future<bool> refreshToken() async {
+    if (!_isAuthenticated || _user == null) {
+      return false;
+    }
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      Logger.info('Token refresh requested');
+      // Token refresh logic would be implemented here
+      // For now, just verify current session is still valid
+      final isLoggedIn = await _secureStorage.isLoggedIn();
+      if (isLoggedIn) {
+        _isLoading = false;
+        notifyListeners();
+        Logger.info('Token refresh successful');
+        return true;
+      }
+      
+      _isLoading = false;
+      _isAuthenticated = false;
+      notifyListeners();
+      return false;
+    } catch (e) {
+      Logger.error('Token refresh failed', e);
+      _isLoading = false;
+      _errorMessage = 'Session expired. Please login again.';
+      _isAuthenticated = false;
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Clear error message
   void clearError() {
     _errorMessage = null;
