@@ -231,6 +231,54 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Update user profile information
+  /// Updates the current user's data and refreshes the state
+  Future<bool> updateUserProfile({
+    String? name,
+    String? email,
+  }) async {
+    if (!_isAuthenticated || _user == null) {
+      _errorMessage = 'User not authenticated';
+      notifyListeners();
+      return false;
+    }
+
+    _isLoading = true;
+    notifyListeners();
+
+    try {
+      Logger.info('Updating user profile');
+      
+      // Create updated user object
+      final updatedUser = User(
+        id: _user!.id,
+        name: name ?? _user!.name,
+        email: email ?? _user!.email,
+        avatar: _user!.avatar,
+        createdAt: _user!.createdAt,
+        updatedAt: DateTime.now(),
+        authProvider: _user!.authProvider,
+        gender: _user!.gender,
+        age: _user!.age,
+      );
+
+      // Save updated user data
+      await _secureStorage.saveUserData(updatedUser.toJson());
+      _user = updatedUser;
+      _isLoading = false;
+      
+      notifyListeners();
+      Logger.info('User profile updated successfully');
+      return true;
+    } catch (e) {
+      Logger.error('Error updating user profile', e);
+      _isLoading = false;
+      _errorMessage = 'Failed to update profile';
+      notifyListeners();
+      return false;
+    }
+  }
+
   /// Refresh authentication token
   /// Useful for maintaining session without re-login
   Future<bool> refreshToken() async {
