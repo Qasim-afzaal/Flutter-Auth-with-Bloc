@@ -63,14 +63,24 @@ class AuthProvider extends ChangeNotifier {
       final isLoggedIn = await _secureStorage.isLoggedIn();
       if (isLoggedIn) {
         final userData = await _secureStorage.getUserData();
-        if (userData != null) {
-          _user = User.fromJson(userData);
-          _isAuthenticated = true;
-          notifyListeners(); // Notify UI to rebuild (like emit in BLoC)
+        if (userData != null && userData.isNotEmpty) {
+          try {
+            _user = User.fromJson(userData);
+            _isAuthenticated = true;
+            notifyListeners(); // Notify UI to rebuild (like emit in BLoC)
+          } catch (e) {
+            Logger.error('Error parsing user data', e);
+            // Clear invalid data
+            await _secureStorage.clearAll();
+            _user = null;
+            _isAuthenticated = false;
+          }
         }
       }
     } catch (e) {
       Logger.error('Error checking auth status', e);
+      _user = null;
+      _isAuthenticated = false;
     }
   }
 
