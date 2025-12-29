@@ -195,6 +195,22 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Check if current session is still valid
+  /// Returns true if user is authenticated and session hasn't expired
+  Future<bool> isSessionValid() async {
+    if (!_isAuthenticated || _user == null) {
+      return false;
+    }
+
+    try {
+      final isLoggedIn = await _secureStorage.isLoggedIn();
+      return isLoggedIn;
+    } catch (e) {
+      Logger.error('Error checking session validity', e);
+      return false;
+    }
+  }
+
   /// Refresh user data from storage
   /// Useful for syncing user information after profile updates
   Future<void> refreshUserData() async {
