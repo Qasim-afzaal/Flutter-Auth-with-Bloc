@@ -192,6 +192,26 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Refresh user data from storage
+  /// Useful for syncing user information after profile updates
+  Future<void> refreshUserData() async {
+    if (!_isAuthenticated) {
+      return;
+    }
+
+    try {
+      Logger.info('Refreshing user data');
+      final userData = await _secureStorage.getUserData();
+      if (userData != null) {
+        _user = User.fromJson(userData);
+        notifyListeners();
+        Logger.info('User data refreshed successfully');
+      }
+    } catch (e) {
+      Logger.error('Error refreshing user data', e);
+    }
+  }
+
   /// Refresh authentication token
   /// Useful for maintaining session without re-login
   Future<bool> refreshToken() async {
