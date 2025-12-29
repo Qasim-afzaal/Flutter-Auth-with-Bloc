@@ -47,6 +47,12 @@ class AuthProvider extends ChangeNotifier {
     return RegExp(_emailRegex).hasMatch(email);
   }
 
+  /// Validates password length
+  bool _isValidPassword(String password) {
+    return password.length >= _minPasswordLength && 
+           password.length <= _maxPasswordLength;
+  }
+
   /// Check authentication status on app start
   /// Equivalent to AuthCheckRequested event in BLoC
   Future<void> _checkAuthStatus() async {
