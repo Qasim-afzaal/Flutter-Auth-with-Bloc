@@ -53,15 +53,54 @@ class AuthProvider extends ChangeNotifier {
     _checkAuthStatus();
   }
 
-  /// Validates email format using regex
+  /// Validates email format using regex pattern
+  /// 
+  /// Returns `true` if email matches the standard email format,
+  /// `false` otherwise.
+  /// 
+  /// Pattern: `^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$`
   bool _isValidEmail(String email) {
     return RegExp(_emailRegex).hasMatch(email);
   }
 
-  /// Validates password length
+  /// Validates password length against configured constraints
+  /// 
+  /// Returns `true` if password length is between `_minPasswordLength`
+  /// and `_maxPasswordLength`, `false` otherwise.
+  /// 
+  /// Default constraints: 8-128 characters
   bool _isValidPassword(String password) {
     return password.length >= _minPasswordLength && 
            password.length <= _maxPasswordLength;
+  }
+
+  /// Extracts and formats user-friendly error messages from exceptions
+  /// 
+  /// Removes technical prefixes like "Exception: " and provides
+  /// context-aware error messages for common scenarios.
+  String _formatErrorMessage(Object error) {
+    String errorMsg = error.toString();
+    
+    // Remove common exception prefixes
+    if (errorMsg.contains('Exception: ')) {
+      errorMsg = errorMsg.replaceAll('Exception: ', '');
+    } else if (errorMsg.contains('Exception')) {
+      errorMsg = errorMsg.replaceAll('Exception', '').trim();
+    }
+    
+    // Provide user-friendly messages for common errors
+    final lowerMsg = errorMsg.toLowerCase();
+    if (lowerMsg.contains('network') || lowerMsg.contains('connection')) {
+      return 'Network error. Please check your connection.';
+    } else if (lowerMsg.contains('invalid') || lowerMsg.contains('credentials')) {
+      return 'Invalid email or password.';
+    } else if (lowerMsg.contains('email') && lowerMsg.contains('exist')) {
+      return 'Email already registered. Please use a different email.';
+    } else if (errorMsg.isEmpty) {
+      return 'An error occurred. Please try again.';
+    }
+    
+    return errorMsg;
   }
 
   /// Check authentication status on app start
