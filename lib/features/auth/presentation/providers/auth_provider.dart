@@ -18,6 +18,8 @@ class AuthProvider extends ChangeNotifier {
 
   // Validation constants
   static const String _emailRegex = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
+  static const int _minPasswordLength = 8;
+  static const int _maxPasswordLength = 128;
 
   // State properties (equivalent to BLoC states)
   User? _user;
