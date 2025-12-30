@@ -212,6 +212,13 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
 
+    // Validate password complexity
+    if (!_isPasswordComplex(password)) {
+      _errorMessage = 'Password must contain uppercase, lowercase, and numbers';
+      notifyListeners();
+      return false;
+    }
+
     _isLoading = true;
     _errorMessage = null;
     notifyListeners(); // Notify UI that loading started
@@ -289,6 +296,13 @@ class AuthProvider extends ChangeNotifier {
     // Validate password length
     if (!_isValidPassword(password)) {
       _errorMessage = 'Password must be between $_minPasswordLength and $_maxPasswordLength characters';
+      notifyListeners();
+      return false;
+    }
+
+    // Validate password complexity
+    if (!_isPasswordComplex(password)) {
+      _errorMessage = 'Password must contain uppercase, lowercase, and numbers';
       notifyListeners();
       return false;
     }
