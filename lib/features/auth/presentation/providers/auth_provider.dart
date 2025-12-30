@@ -83,6 +83,26 @@ class AuthProvider extends ChangeNotifier {
            password.length <= _maxPasswordLength;
   }
 
+  /// Validates password complexity requirements
+  /// 
+  /// Returns `true` if password meets all configured complexity requirements,
+  /// `false` otherwise.
+  bool _isPasswordComplex(String password) {
+    if (_requireUppercase && !password.contains(RegExp(r'[A-Z]'))) {
+      return false;
+    }
+    if (_requireLowercase && !password.contains(RegExp(r'[a-z]'))) {
+      return false;
+    }
+    if (_requireNumbers && !password.contains(RegExp(r'[0-9]'))) {
+      return false;
+    }
+    if (_requireSpecialChars && !password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) {
+      return false;
+    }
+    return true;
+  }
+
   /// Validates name length and format
   /// 
   /// Returns `true` if name is not empty and within `_maxNameLength`,
