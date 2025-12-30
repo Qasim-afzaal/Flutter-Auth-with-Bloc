@@ -214,6 +214,23 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    // Validate empty strings
+    if (name.trim().isEmpty) {
+      _errorMessage = 'Name cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    if (email.trim().isEmpty) {
+      _errorMessage = 'Email cannot be empty';
+      notifyListeners();
+      return false;
+    }
+    if (password.trim().isEmpty) {
+      _errorMessage = 'Password cannot be empty';
+      notifyListeners();
+      return false;
+    }
+
     // Validate name
     if (!_isValidName(name)) {
       _errorMessage = 'Name must be between 1 and $_maxNameLength characters';
