@@ -30,6 +30,12 @@ class AuthProvider extends ChangeNotifier {
   static const int _maxPasswordLength = 128;
   static const int _maxNameLength = 100;
   static const String _defaultErrorMessage = 'An error occurred. Please try again.';
+  
+  // Password complexity requirements
+  static const bool _requireUppercase = true;
+  static const bool _requireLowercase = true;
+  static const bool _requireNumbers = true;
+  static const bool _requireSpecialChars = false;
 
   // Session constants
   static const Duration _sessionTimeout = Duration(hours: 24);
