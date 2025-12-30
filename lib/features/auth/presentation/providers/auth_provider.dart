@@ -70,7 +70,11 @@ class AuthProvider extends ChangeNotifier {
   /// 
   /// Pattern: `^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$`
   bool _isValidEmail(String email) {
-    return RegExp(_emailRegex).hasMatch(email);
+    final trimmedEmail = email.trim();
+    if (trimmedEmail.isEmpty) {
+      return false;
+    }
+    return RegExp(_emailRegex).hasMatch(trimmedEmail);
   }
 
   /// Validates password length against configured constraints
