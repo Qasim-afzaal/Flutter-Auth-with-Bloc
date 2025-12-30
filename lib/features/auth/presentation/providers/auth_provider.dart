@@ -550,6 +550,13 @@ class AuthProvider extends ChangeNotifier {
     return null;
   }
 
+  /// Update last login time
+  /// Updates the timestamp when user successfully logs in
+  void _updateLastLoginTime() {
+    _lastLoginTime = DateTime.now();
+    _sessionStartTime = DateTime.now();
+  }
+
   /// Clear all state and reset to initial values
   /// Useful for testing or complete state reset
   void clearAllState() {
