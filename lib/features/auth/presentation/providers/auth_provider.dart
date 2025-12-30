@@ -28,6 +28,7 @@ class AuthProvider extends ChangeNotifier {
   static const String _emailRegex = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
   static const int _minPasswordLength = 8;
   static const int _maxPasswordLength = 128;
+  static const int _maxNameLength = 100;
   static const String _defaultErrorMessage = 'An error occurred. Please try again.';
 
   // Session constants
