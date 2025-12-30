@@ -476,6 +476,15 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
+  /// Get user display name
+  /// Returns the user's name if available, otherwise returns email
+  String? getDisplayName() {
+    if (_user != null) {
+      return _user!.name.isNotEmpty ? _user!.name : _user!.email;
+    }
+    return null;
+  }
+
   /// Clear error message
   void clearError() {
     _errorMessage = null;
