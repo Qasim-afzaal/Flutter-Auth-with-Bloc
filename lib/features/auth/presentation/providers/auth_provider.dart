@@ -156,6 +156,8 @@ class AuthProvider extends ChangeNotifier {
 
   /// Login method
   /// Equivalent to LoginRequested event in BLoC
+  /// 
+  /// Note: Consider implementing rate limiting to prevent brute force attacks
   Future<bool> login(String email, String password) async {
     // Validate empty strings
     if (email.trim().isEmpty) {
