@@ -339,6 +339,15 @@ class AuthProvider extends ChangeNotifier {
       return false;
     }
 
+    // Check if session has expired based on timeout
+    if (_sessionStartTime != null) {
+      final sessionAge = DateTime.now().difference(_sessionStartTime!);
+      if (sessionAge > _sessionTimeout) {
+        Logger.warning('Session expired after ${sessionAge.inHours} hours');
+        return false;
+      }
+    }
+
     try {
       final isLoggedIn = await _secureStorage.isLoggedIn();
       return isLoggedIn;
