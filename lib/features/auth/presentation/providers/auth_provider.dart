@@ -139,8 +139,8 @@ class AuthProvider extends ChangeNotifier {
       return 'Invalid email or password.';
     } else if (lowerMsg.contains('email') && lowerMsg.contains('exist')) {
       return 'Email already registered. Please use a different email.';
-    } else if (errorMsg.isEmpty) {
-      return 'An error occurred. Please try again.';
+    } else       if (errorMsg.isEmpty) {
+      return _defaultErrorMessage;
     }
     
     return errorMsg;
