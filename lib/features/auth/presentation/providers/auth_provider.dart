@@ -76,6 +76,15 @@ class AuthProvider extends ChangeNotifier {
            password.length <= _maxPasswordLength;
   }
 
+  /// Validates name length and format
+  /// 
+  /// Returns `true` if name is not empty and within `_maxNameLength`,
+  /// `false` otherwise.
+  bool _isValidName(String name) {
+    final trimmedName = name.trim();
+    return trimmedName.isNotEmpty && trimmedName.length <= _maxNameLength;
+  }
+
   /// Extracts and formats user-friendly error messages from exceptions
   /// 
   /// Removes technical prefixes like "Exception: " and provides
