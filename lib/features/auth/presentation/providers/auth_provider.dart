@@ -202,6 +202,13 @@ class AuthProvider extends ChangeNotifier {
     required String email,
     required String password,
   }) async {
+    // Validate name
+    if (!_isValidName(name)) {
+      _errorMessage = 'Name must be between 1 and $_maxNameLength characters';
+      notifyListeners();
+      return false;
+    }
+
     // Validate email format
     if (!_isValidEmail(email)) {
       _errorMessage = 'Please enter a valid email address';
