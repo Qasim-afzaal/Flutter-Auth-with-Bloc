@@ -46,6 +46,7 @@ class AuthProvider extends ChangeNotifier {
   String? _errorMessage;
   bool _isAuthenticated = false;
   DateTime? _sessionStartTime;
+  DateTime? _lastLoginTime;
 
   // Getters (equivalent to accessing BLoC state)
   User? get user => _user;
