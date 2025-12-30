@@ -132,13 +132,25 @@ class AuthProvider extends ChangeNotifier {
             await _secureStorage.clearAll();
             _user = null;
             _isAuthenticated = false;
+            notifyListeners(); // Notify UI of state change
           }
+        } else {
+          // No user data found, clear authentication
+          _user = null;
+          _isAuthenticated = false;
+          notifyListeners();
         }
+      } else {
+        // Not logged in, ensure state is cleared
+        _user = null;
+        _isAuthenticated = false;
+        notifyListeners();
       }
     } catch (e) {
       Logger.error('Error checking auth status', e);
       _user = null;
       _isAuthenticated = false;
+      notifyListeners(); // Notify UI of error state
     }
   }
 
@@ -483,6 +495,16 @@ class AuthProvider extends ChangeNotifier {
       return _user!.name.isNotEmpty ? _user!.name : _user!.email;
     }
     return null;
+  }
+
+  /// Clear all state and reset to initial values
+  /// Useful for testing or complete state reset
+  void clearAllState() {
+    _user = null;
+    _isLoading = false;
+    _errorMessage = null;
+    _isAuthenticated = false;
+    notifyListeners();
   }
 
   /// Clear error message
