@@ -225,8 +225,8 @@ class AuthProvider extends ChangeNotifier {
     notifyListeners(); // Notify UI that loading started
 
     try {
-      Logger.info('Login requested with email: $email');
-      final user = await _authRepository.login(email, password);
+      Logger.info('Login requested with email: ${email.trim()}');
+      final user = await _authRepository.login(email.trim(), password);
       
       if (user != null) {
         _user = user;
@@ -235,7 +235,7 @@ class AuthProvider extends ChangeNotifier {
         _errorMessage = null;
         
         notifyListeners(); // Notify UI that login succeeded
-        Logger.info('Login successful for user: ${user.email}');
+        Logger.info('Login successful for user: ${user.email} at ${DateTime.now()}');
         return true;
       } else {
         Logger.warning('Login returned null user');
